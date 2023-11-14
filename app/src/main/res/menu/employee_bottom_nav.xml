@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/employeeLeaveApplicationFragment"
+        android:icon="@drawable/application_icon"
+        android:title="休暇申込"/>
+    <item
+        android:id="@+id/employeeLeaveRecordFragment"
+        android:icon="@drawable/record_icon"
+        android:title="休暇履歴"/>
+    <item
+        android:id="@+id/employeeLeaveCalendarFragment"
+        android:icon="@drawable/calendar_icon"
+        android:title="カレンダー"/>
+</menu>

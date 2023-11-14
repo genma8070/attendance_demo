@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_logout"
+        android:text="ログアウト"
+        android:layout_marginLeft="280dp"/>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/employee_view_nav"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:navGraph="@navigation/manage_bottom_nav"
+        android:layout_weight="1"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:menu="@menu/manage_bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/manage_bottom_nav"
+        android:background="@color/white"/>
+</LinearLayout>
