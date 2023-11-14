@@ -12,7 +12,6 @@ import com.example.demo_06.databinding.FragmentHomeBinding
 import com.example.demo_06.databinding.FragmentLeaveRecordDetail01Binding
 import com.example.demo_06.databinding.FragmentManageLeaveRecordBinding
 import com.example.demo_06.databinding.FragmentManageLeaveReviewBinding
-import com.example.demo_06.databinding.FragmentManageLeaveReviewFirst02Binding
 import com.example.demo_06.databinding.FragmentManageLeaveReviewFirstBinding
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
 

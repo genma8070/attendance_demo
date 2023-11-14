@@ -67,76 +67,10 @@
                 android:textSize="20dp"
                 android:text="　23/11/8"/>
             <Button
-                android:id="@+id/btn_review_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="社員A"/>
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="　23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="　23/11/8"/>
-            <Button
-                android:id="@+id/btn_review_first_02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="社員B"/>
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="　23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="　23/11/8"/>
-            <Button
                 android:id="@+id/btn_review_first_001"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="現場リーダー"/>
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="　23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="　23/11/8"/>
-            <Button
-                android:id="@+id/btn_review_first_002"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="本社"/>
         </TableRow>
     </TableLayout>
 

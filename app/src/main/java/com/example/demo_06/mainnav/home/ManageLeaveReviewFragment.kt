@@ -35,17 +35,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 //                this.testValue.value="home改變了public的值"
 //            }
 //        }
-        binding.btnReviewSecond.setOnClickListener {
-            requireActivity().findNavController(R.id.employee_view_nav).navigate(R.id.action_manageLeaveReviewFragment_to_manageLeaveReviewSecondFragment)
-        }
-        binding.btnReviewFirst02.setOnClickListener {
-            requireActivity().findNavController(R.id.employee_view_nav).navigate(R.id.action_manageLeaveReviewFragment_to_manageLeaveReviewFirst02Fragment)
-        }
         binding.btnReviewFirst001.setOnClickListener {
             requireActivity().findNavController(R.id.employee_view_nav).navigate(R.id.action_manageLeaveReviewFragment_to_manageLeaveReviewFirstFragment)
-        }
-        binding.btnReviewFirst002.setOnClickListener {
-            requireActivity().findNavController(R.id.employee_view_nav).navigate(R.id.action_manageLeaveReviewFragment_to_manageLeaveReviewFirst03Fragment)
         }
     }
 

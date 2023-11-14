@@ -56,28 +56,6 @@
                 android:layout_height="wrap_content"
                 android:text="詳細01"/>
         </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="現場審查中"/>
-            <Button
-                android:id="@+id/btn_record_detail_04"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="詳細02"/>
-        </TableRow>
     </TableLayout>
 
 </LinearLayout>

@@ -37,9 +37,6 @@ class ManageLeaveRecordFragment: BaseFragment<FragmentManageLeaveRecordBinding, 
         binding.btnRecordDetail03.setOnClickListener {
             requireActivity().findNavController(R.id.employee_view_nav).navigate(R.id.action_manageLeaveRecordFragment_to_leaveRecordDetail03Fragment)
         }
-        binding.btnRecordDetail04.setOnClickListener {
-            requireActivity().findNavController(R.id.employee_view_nav).navigate(R.id.action_manageLeaveRecordFragment_to_leaveRecordDetail04Fragment)
-        }
     }
 
 }
