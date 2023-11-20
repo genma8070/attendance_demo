@@ -2,6 +2,7 @@ package com.example.demo_06.ui.login
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
@@ -14,7 +15,6 @@ import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
 import com.example.demo_06.network.res.UserLoginRes
-import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,22 +29,25 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
         viewModel: ViewModel?,
         savedInstanceState: Bundle?
     ) {
-        binding.loginBtnEmployee.setOnClickListener{
-            findNavController().navigate(
-                R.id.employeeNavFragment,
-                null,
-                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
-        }
-        binding.loginBtnManage.setOnClickListener{
-            findNavController().navigate(
-                R.id.manageNavFragment,
-                null,
-                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
-        }
-
+//        binding.loginBtnEmployee.setOnClickListener{
+//            findNavController().navigate(
+//                R.id.employeeNavFragment,
+//                null,
+//                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
+//        }
+//        binding.loginBtnManage.setOnClickListener{
+//            findNavController().navigate(
+//                R.id.manageNavFragment,
+//                null,
+//                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
+//        }
 
         binding.loginBtn.setOnClickListener{
-            RequestBuilder().getAPI(User::class.java).login(LoginInfo("A003","123123"))
+            var account = binding.accountInput.text.toString()
+            var password = binding.passwordInput.text.toString()
+
+//            RequestBuilder().getAPI(User::class.java).login(LoginInfo("A003","123123"))
+            RequestBuilder().getAPI(User::class.java).login(LoginInfo(account,password))
 //                .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
                 .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
                     override fun onResponse(
