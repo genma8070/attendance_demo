@@ -44,7 +44,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
 
 
         binding.loginBtn.setOnClickListener{
-            RequestBuilder().getAPI(User::class.java).login(LoginInfo("A001","123123"))
+            RequestBuilder().getAPI(User::class.java).login(LoginInfo("A003","123123"))
 //                .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
                 .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
                     override fun onResponse(
@@ -56,14 +56,30 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                                 Log.e("TAG","onResponse:${it.body().data.toString()}")
                                 Log.e("TAG","onResponse:${it.code()}")
 //                                Log.e("TAG","onResponse:${it.message()}")
-                                Log.e("TAG","onResponse(code):${it.body().data?.password.toString()}")
-                                Log.e("TAG","onResponse(code):${it.body().data?.account.toString()}")
-                                Log.e("TAG","onResponse(message):${it.body().data?.name.toString()}")
-                                Log.e("TAG","onResponse:${it.body().data}")
+//                                Log.e("TAG","onResponse(code):${it.body().data?.password.toString()}")
+//                                Log.e("TAG","onResponse(code):${it.body().data?.account.toString()}")
+//                                Log.e("TAG","onResponse(message):${it.body().data?.name.toString()}")
+//                                Log.e("TAG","onResponse:${it.body().data}")
                                 Toast.makeText(
                                     requireContext(),
                                     "${it.body().message}",
                                     Toast.LENGTH_SHORT).show()
+
+                                if(it.body().status == "200"){
+                                    if(it.body().data?.authorizationRank == 1) {
+                                        findNavController().navigate(
+                                            R.id.employeeNavFragment,
+                                            null,
+                                            NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
+                                    }
+                                    else {
+                                        findNavController().navigate(
+                                            R.id.manageNavFragment,
+                                            null,
+                                            NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
+                                    }
+                                }
+
                             }else {
                                 Toast.makeText(
                                     requireContext(),
