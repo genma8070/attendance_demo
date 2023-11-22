@@ -3,73 +3,66 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="260dp"
-        android:textSize="30dp"
-        android:text="提出"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:text="現場:"
-        android:singleLine="true"/>
-    <Button
-        style="?android:spinnerStyle"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="現場A"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:text="開始:"
         android:singleLine="true"/>
-    <!--    <TextView-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:textSize="30dp"-->
-    <!--        android:text="JAN 09 2022"-->
-    <!--        android:singleLine="true"-->
-    <!--        android:id="@+id/tvDatePicker"/>-->
     <Button
-        style="?android:spinnerStyle"
-        android:layout_width="250dp"
+        android:id="@+id/start_date"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="JAN 09 2022"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
-    <!--    <DatePicker-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"/>-->
-    <!--    <CalendarView-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"/>-->
-
+        android:layout_marginLeft="50sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginRight="30sp"
+        android:inputType="date"
+        android:text=" 日付を選択 "
+        android:textSize="26sp"
+        android:backgroundTint="@color/material_dynamic_neutral70"
+        android:textColor="@color/black"/>
+    <Button
+        android:id="@+id/start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginRight="30sp"
+        android:inputType="date"
+        android:text=" 時間を選択 "
+        android:textSize="26sp"
+        android:backgroundTint="@color/material_dynamic_neutral70"
+        android:textColor="@color/black"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:text="終了:"/>
     <Button
-        style="?android:spinnerStyle"
-        android:layout_width="250dp"
+        android:id="@+id/end_date"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="JAN 09 2022"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
-    <!--    <DatePicker-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"/>-->
+        android:layout_marginLeft="50sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginRight="30sp"
+        android:inputType="date"
+        android:text=" 日付を選択 "
+        android:textSize="26sp"
+        android:backgroundTint="@color/material_dynamic_neutral70"
+        android:textColor="@color/black"/>
+    <Button
+        android:id="@+id/end_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginRight="30sp"
+        android:inputType="date"
+        android:text=" 時間を選択 "
+        android:textSize="26sp"
+        android:backgroundTint="@color/material_dynamic_neutral70"
+        android:textColor="@color/black"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,5 +90,11 @@
         android:maxLines="4"
         android:minLines="3"
         android:scrollbars="vertical" />
-
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal"
+        android:text="申込"
+        android:id="@+id/employee_leave_submit"/>
 </LinearLayout>
