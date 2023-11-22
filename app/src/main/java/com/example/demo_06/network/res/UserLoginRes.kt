@@ -10,7 +10,7 @@ import android.provider.ContactsContract.CommonDataKinds.Nickname
 //)
 
 data class UserLoginRes (
-    val employeeId: String,
+    val personalNo: String,
     val password: String,
-    val authorizationRank: Int=0,
+    val appAuthority: Int=0,
 )

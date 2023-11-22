@@ -4,6 +4,6 @@ import com.google.gson.JsonIOException
 import com.google.gson.JsonObject
 
 data class LoginInfo (
-    val employee_id: String="",
+    val personalNo: String="",
     val password: String=""
 )

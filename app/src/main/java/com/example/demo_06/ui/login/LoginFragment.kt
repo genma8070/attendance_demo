@@ -69,7 +69,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                                     Toast.LENGTH_SHORT).show()
 
                                 if(it.body().status == "200"){
-                                    if(it.body().data?.authorizationRank == 1) {
+                                    if(it.body().data?.appAuthority == 1) {
                                         findNavController().navigate(
                                             R.id.employeeNavFragment,
                                             null,
