@@ -1,8 +1,8 @@
 package com.example.demo_06.ui.login
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
-import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
@@ -18,6 +18,7 @@ import com.example.demo_06.network.res.UserLoginRes
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.regex.Pattern
 
 
 class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
@@ -41,6 +42,9 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
 //                null,
 //                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
 //        }
+
+        binding.accountInput.filters = arrayOf<InputFilter>(Filter,InputFilter.LengthFilter(9))
+        binding.passwordInput.filters = arrayOf<InputFilter>(Filter,InputFilter.LengthFilter(20))
 
         binding.loginBtn.setOnClickListener{
             var account = binding.accountInput.text.toString()
@@ -103,6 +107,19 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
 //                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
         }
 
+    }
+
+//  入力制限（英語と数字しか入力できる）
+    val Filter = InputFilter { source, start, end, dest, dstart, dend ->
+        val p = Pattern.compile("[0-9a-zA-Z]+")
+        val m = p.matcher(source.toString())
+        val s = p.matcher(source[0].toString())
+        if (!s.matches())
+            Toast.makeText(
+                requireContext(),
+                "英語と数字しか入力できません",
+                Toast.LENGTH_SHORT).show()
+        if (!m.matches()) "" else null
     }
 
 }
