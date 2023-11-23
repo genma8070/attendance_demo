@@ -1,6 +1,10 @@
 package com.example.demo_06.mainnav.home
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -9,7 +13,9 @@ import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
 import com.example.demo_06.databinding.FragmentHomeBinding
 import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
+import com.example.demo_06.mainnav.accountPublic
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
+import java.util.Calendar
 
 class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicationBinding, PublicViewModel>(
     FragmentManageLeaveApplicationBinding::inflate,
@@ -33,6 +39,113 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
 //                this.testValue.value="home改變了public的值"
 //            }
 //        }
+
+        binding.startDate.setOnClickListener{
+            val calendar: Calendar = Calendar.getInstance()
+            val year: Int = calendar.get(Calendar.YEAR)
+            val month: Int = calendar.get(Calendar.MONTH)
+            val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
+//          選択した日付を表示する
+            DatePickerDialog(it.context,
+                { view, year, month, day ->
+                    val datetime = "$year-$month-$day"
+                    binding.startDate?.setText(datetime)
+                }, year, month, day
+            ).show()
+        }
+
+        binding.startTime.setOnClickListener{
+            val calendar: Calendar = Calendar.getInstance()
+            val hourOfDay: Int = calendar.get(Calendar.HOUR)
+            val minute: Int = calendar.get(Calendar.MINUTE)
+//          選択した時間を表示する
+            TimePickerDialog(it.context,
+                { view, hourOfDay, minute ->
+                    val datetime = "$hourOfDay:$minute"
+                    binding.startTime?.setText(datetime)
+                }, hourOfDay, minute, true
+            ).show()
+        }
+
+        binding.endDate.setOnClickListener{
+            val calendar: Calendar = Calendar.getInstance()
+            val year: Int = calendar.get(Calendar.YEAR)
+            val month: Int = calendar.get(Calendar.MONTH)
+            val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
+//          選択した日付を表示する
+            DatePickerDialog(it.context,
+                { view, year, month, day ->
+                    val datetime = "$year-$month-$day"
+                    binding.endDate?.setText(datetime)
+                }, year, month, day
+            ).show()
+        }
+
+        binding.endTime.setOnClickListener{
+            val calendar: Calendar = Calendar.getInstance()
+            val hourOfDay: Int = calendar.get(Calendar.HOUR)
+            val minute: Int = calendar.get(Calendar.MINUTE)
+//          選択した時間を表示する
+            TimePickerDialog(it.context,
+                { view, hourOfDay, minute ->
+                    val datetime = "$hourOfDay:$minute"
+                    binding.endTime?.setText(datetime)
+                }, hourOfDay, minute, true
+            ).show()
+        }
+
+        binding.holidayType1.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType1.setTextColor(Color.parseColor("#FFFFFF"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
+        }
+        binding.holidayType2.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType2.setTextColor(Color.parseColor("#FFFFFF"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
+        }
+        binding.holidayType3.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType3.setTextColor(Color.parseColor("#FFFFFF"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
+        }
+        binding.holidayType4.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType4.setTextColor(Color.parseColor("#FFFFFF"))
+        }
+
+        binding.leaveSubmit.setOnClickListener{
+//            var startDate = binding.startDate.text.toString()
+//            var startTime = binding.startTime.text.toString()
+
+            Toast.makeText(
+                requireContext(),
+                accountPublic,//需要取得(account的值)
+                Toast.LENGTH_SHORT).show()
+
+        }
+
     }
 
 }

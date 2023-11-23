@@ -2,12 +2,15 @@ package com.example.demo_06.mainnav.home
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
+import com.example.demo_06.databinding.FragmentEmployeeNavBinding
+import com.example.demo_06.mainnav.accountPublic
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
 import java.util.Calendar
 
@@ -98,13 +101,54 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             ).show()
         }
 
-        binding.employeeLeaveSubmit.setOnClickListener{
-            var startDate = binding.startDate.text.toString()
-            var startTime = binding.startTime.text.toString()
+        binding.holidayType1.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType1.setTextColor(Color.parseColor("#FFFFFF"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
+        }
+        binding.holidayType2.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType2.setTextColor(Color.parseColor("#FFFFFF"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
+        }
+        binding.holidayType3.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType3.setTextColor(Color.parseColor("#FFFFFF"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
+        }
+        binding.holidayType4.setOnClickListener{
+            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
+            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
+            binding.holidayType4.setBackgroundColor(Color.parseColor("#0000FF"))
+            binding.holidayType4.setTextColor(Color.parseColor("#FFFFFF"))
+        }
+
+        binding.leaveSubmit.setOnClickListener{
+//            var startDate = binding.startDate.text.toString()
+//            var startTime = binding.startTime.text.toString()
 
             Toast.makeText(
                 requireContext(),
-                startDate+startTime,
+                accountPublic,//需要取得(account的值)
                 Toast.LENGTH_SHORT).show()
 
         }

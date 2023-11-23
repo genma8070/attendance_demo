@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.demo_06.R
 import com.example.demo_06.base.BaseFragment
@@ -73,16 +74,21 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                                     Toast.LENGTH_SHORT).show()
 
                                 if(it.body().status == "200"){
+//                                  アカウントを次のページに伝達用
+                                    val bundle = Bundle()
+                                    bundle.putString("account", it.body().data?.personalNo)
+
                                     if(it.body().data?.appAuthority == 1) {
+
                                         findNavController().navigate(
                                             R.id.employeeNavFragment,
-                                            null,
+                                            bundle,
                                             NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
                                     }
                                     else {
                                         findNavController().navigate(
                                             R.id.manageNavFragment,
-                                            null,
+                                            bundle,
                                             NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
                                     }
                                 }

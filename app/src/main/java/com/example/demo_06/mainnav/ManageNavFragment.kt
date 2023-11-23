@@ -20,11 +20,24 @@ class ManageNavFragment: BaseFragment<FragmentManageNavBinding, ViewModel>(
         viewModel: ViewModel?,
         savedInstanceState: Bundle?
     ) {
+
+        arguments?.let {
+            val value = it.getString("account")
+            binding.account.setText(value)
+//            accountPublic.let {
+//                value
+//            }
+            if (value != null) {
+                accountPublic = value
+            }
+        }
+
         (childFragmentManager.findFragmentById(R.id.employee_view_nav) as NavHostFragment).apply {
             binding.manageBottomNav.setupWithNavController(this.navController)
         }
 
         binding.btnLogout.setOnClickListener{
+            accountPublic = ""
             findNavController().navigate(
                 R.id.loginFragment,
                 null,

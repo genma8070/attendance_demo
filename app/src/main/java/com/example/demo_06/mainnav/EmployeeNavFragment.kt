@@ -11,6 +11,8 @@ import com.example.demo_06.R
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeNavBinding
 
+var accountPublic=""
+
 class EmployeeNavFragment: BaseFragment<FragmentEmployeeNavBinding, ViewModel>(
     FragmentEmployeeNavBinding::inflate,
     viewModelClass = null
@@ -20,6 +22,18 @@ class EmployeeNavFragment: BaseFragment<FragmentEmployeeNavBinding, ViewModel>(
         viewModel: ViewModel?,
         savedInstanceState: Bundle?
     ) {
+
+        arguments?.let {
+            val value = it.getString("account")
+            binding.account.setText(value)
+//            accountPublic.let {
+//                value
+//            }
+            if (value != null) {
+                accountPublic = value
+            }
+        }
+
         (childFragmentManager.findFragmentById(R.id.employee_view_nav) as NavHostFragment).apply {
             binding.employeeBottomNav.setupWithNavController(this.navController)
         }
@@ -29,10 +43,12 @@ class EmployeeNavFragment: BaseFragment<FragmentEmployeeNavBinding, ViewModel>(
 //        }
 
         binding.btnLogout.setOnClickListener{
+            accountPublic = ""
             findNavController().navigate(
                 R.id.loginFragment,
                 null,
                 NavOptions.Builder().setPopUpTo(R.id.employeeNavFragment,true).build())
         }
+
     }
 }
