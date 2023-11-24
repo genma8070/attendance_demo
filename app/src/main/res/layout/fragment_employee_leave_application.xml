@@ -126,10 +126,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:lines="3"
         android:maxLines="4"
-        android:minLines="3"
-        android:scrollbars="vertical" />
+        android:scrollHorizontally="false"
+        android:id="@+id/reason"/>
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

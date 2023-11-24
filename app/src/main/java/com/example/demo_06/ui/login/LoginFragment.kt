@@ -51,9 +51,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
             var account = binding.accountInput.text.toString()
             var password = binding.passwordInput.text.toString()
 
-//            RequestBuilder().getAPI(User::class.java).login(LoginInfo("A003","123123"))
             RequestBuilder().getAPI(User::class.java).login(LoginInfo(account,password))
-//                .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
                 .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
                     override fun onResponse(
                         call: Call<BaseResponse<UserLoginRes>>?,
