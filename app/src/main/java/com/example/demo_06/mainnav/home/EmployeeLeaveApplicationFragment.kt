@@ -1,5 +1,6 @@
 package com.example.demo_06.mainnav.home
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Color
@@ -23,6 +24,7 @@ import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
 import com.example.demo_06.network.res.UserHolidayAcquireRes
 import com.example.demo_06.network.res.UserLoginRes
+import com.example.demo_06.ui.app.MainActivity
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -186,42 +188,63 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             var leaveType = leaveTypeTemp
             var reason = binding.reason.text.toString()
 
-            RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,startDate,startTime,endDate,endTime,leaveType,reason))
-                .enqueue(object : Callback<BaseResponse<UserHolidayAcquireRes>> {
-                    override fun onResponse(
-                        call: Call<BaseResponse<UserHolidayAcquireRes>>?,
-                        response: Response<BaseResponse<UserHolidayAcquireRes>>?
-                    ) {
-                        response?.let {
-                            if(it.body().data != null) {
-//                                Log.e("TAG","onResponse:${it.body().data.toString()}")
-//                                Log.e("TAG","onResponse:${it.code()}")
-                                Toast.makeText(
-                                    requireContext(),
-                                    "${it.body().message}",
-                                    Toast.LENGTH_SHORT).show()
+            AlertDialog.Builder(getActivity())
+                .setTitle("申込確認")
+                .setMessage("本当に申込ますか")
+                .setPositiveButton("確認"){_, _ ->
 
-                                if(it.body().status == "200"){
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "upload successful!",
-                                        Toast.LENGTH_SHORT).show()
+                    RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,startDate,startTime,endDate,endTime,leaveType,reason))
+                        .enqueue(object : Callback<BaseResponse<UserHolidayAcquireRes>> {
+                            override fun onResponse(
+                                call: Call<BaseResponse<UserHolidayAcquireRes>>?,
+                                response: Response<BaseResponse<UserHolidayAcquireRes>>?
+                            ) {
+                                response?.let {
+                                    if(it.body().data != null) {
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    "${it.body().message}",
+//                                    Toast.LENGTH_SHORT).show()
+
+                                        if(it.body().status == "200"){
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "${it.body().message}",
+                                                Toast.LENGTH_SHORT).show()
+
+                                            binding.startDate.setText("日付を選択")
+                                            binding.startTime.setText("時間を選択")
+                                            binding.endDate.setText("日付を選択")
+                                            binding.endTime.setText("時間を選択")
+                                            binding.holidayType1.setBackgroundColor(Color.parseColor("#0000FF"))
+                                            binding.holidayType1.setTextColor(Color.parseColor("#FFFFFF"))
+                                            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
+                                            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
+                                            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
+                                            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
+                                            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
+                                            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
+                                            leaveTypeTemp = "私用"
+                                            binding.reason.setText("")
+                                        }
+
+                                    }else {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "${it.body().message}",
+                                            Toast.LENGTH_SHORT).show()
+                                    }
                                 }
-
-                            }else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "${it.body().message}",
-                                    Toast.LENGTH_SHORT).show()
                             }
-                        }
-                    }
 
-                    override fun onFailure(call: Call<BaseResponse<UserHolidayAcquireRes>>?, t: Throwable?) {
+                            override fun onFailure(call: Call<BaseResponse<UserHolidayAcquireRes>>?, t: Throwable?) {
 //                        Log.e("TAG","NetWorkErr!")
-                    }
+                            }
 
-                })
+                        })
+                }
+                .setNeutralButton("キャンセル", null)
+                .show()
 
         }
 
