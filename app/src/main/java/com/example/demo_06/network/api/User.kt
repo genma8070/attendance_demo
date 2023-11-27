@@ -13,10 +13,12 @@ import java.lang.invoke.MethodHandleInfo
 
 interface User {
 
+//  ログイン
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/login")
     fun login(@Body loginInfo: LoginInfo): Call<BaseResponse<UserLoginRes>>
 
+//  休暇申込
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/holiday_acquire")
     fun holidayAcquire(@Body holidayAcquireInfo: HolidayAcquireInfo): Call<BaseResponse<UserHolidayAcquireRes>>

@@ -44,40 +44,18 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
         savedInstanceState: Bundle?
     ) {
 
+//      休暇タイプ
         var leaveTypeTemp = "私用"
 
-//        viewModel!!.testValue.observe(requireActivity()){
-//            binding.value.text=it
-//        }
-//        binding.btnValue.setOnClickListener {
-////            requireActivity().findNavController(R.id.app_nav).navigate(R.id.action_mainNavFragment_to_otherFragment)
-//            viewModel.testValue.value = "你好 homeViewModel"
-//        }
-//        binding.btnPubValue.setOnClickListener {
-//            publicViewModel?.apply {
-//                this.testValue.value="home改變了public的值"
-//            }
-//        }
-//        binding.datePicker.setOnClickListener {
-//
-//        }
+//      休暇理由を50字以内に制限
+        binding.reason.filters = arrayOf<InputFilter>(Filter, InputFilter.LengthFilter(50))
 
-//        binding.btnLogout.setOnClickListener{
-//            findNavController().navigate(
-//                com.example.demo_06.R.id.loginFragment,
-//                null,
-//                NavOptions.Builder().setPopUpTo(com.example.demo_06.R.id.manageNavFragment,true).build())
-//        }
-
-        binding.reason.filters = arrayOf<InputFilter>(Filter,InputFilter.LengthFilter(50))
-//        binding.reason.filters
-
+//      開始日付を選択
         binding.startDate.setOnClickListener{
             val calendar: Calendar = Calendar.getInstance()
             val year0: Int = calendar.get(Calendar.YEAR)
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
-
 //          選択した日付を表示する
             DatePickerDialog(it.context,
                 { view, year0, month0, day0->
@@ -89,6 +67,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             ).show()
         }
 
+//      開始時間を選択
         binding.startTime.setOnClickListener{
             val calendar: Calendar = Calendar.getInstance()
             val hourOfDay0: Int = calendar.get(Calendar.HOUR)
@@ -103,12 +82,12 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             ).show()
         }
 
+//      終了日付を選択
         binding.endDate.setOnClickListener{
             val calendar: Calendar = Calendar.getInstance()
             val year0: Int = calendar.get(Calendar.YEAR)
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
-
 //          選択した日付を表示する
             DatePickerDialog(it.context,
                 { view, year0, month0, day0->
@@ -120,6 +99,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             ).show()
         }
 
+//      終了時間を選択
         binding.endTime.setOnClickListener{
             val calendar: Calendar = Calendar.getInstance()
             val hourOfDay0: Int = calendar.get(Calendar.HOUR)
@@ -134,6 +114,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             ).show()
         }
 
+//      休暇タイプをタイプ1に表示
         binding.holidayType1.setOnClickListener{
             binding.holidayType1.setBackgroundColor(Color.parseColor("#0000FF"))
             binding.holidayType1.setTextColor(Color.parseColor("#FFFFFF"))
@@ -145,6 +126,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             binding.holidayType4.setTextColor(Color.parseColor("#000000"))
             leaveTypeTemp = "私用"
         }
+//      休暇タイプをタイプ2に表示
         binding.holidayType2.setOnClickListener{
             binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
             binding.holidayType1.setTextColor(Color.parseColor("#000000"))
@@ -156,6 +138,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             binding.holidayType4.setTextColor(Color.parseColor("#000000"))
             leaveTypeTemp = "体調不良"
         }
+//      休暇タイプをタイプ3に表示
         binding.holidayType3.setOnClickListener{
             binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
             binding.holidayType1.setTextColor(Color.parseColor("#000000"))
@@ -167,6 +150,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             binding.holidayType4.setTextColor(Color.parseColor("#000000"))
             leaveTypeTemp = "振替"
         }
+//      休暇タイプをタイプ4に表示
         binding.holidayType4.setOnClickListener{
             binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
             binding.holidayType1.setTextColor(Color.parseColor("#000000"))
@@ -179,6 +163,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             leaveTypeTemp = "他"
         }
 
+//      休暇申込をデータベースに追加
         binding.leaveSubmit.setOnClickListener{
             var personalNo = accountPublic
             var startDate = binding.startDate.text.toString()
@@ -187,12 +172,12 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             var endTime = binding.endTime.text.toString()
             var leaveType = leaveTypeTemp
             var reason = binding.reason.text.toString()
-
+//          休暇申込の再確認
             AlertDialog.Builder(getActivity())
                 .setTitle("申込確認")
                 .setMessage("本当に申込ますか")
                 .setPositiveButton("確認"){_, _ ->
-
+//                  APIに接続し、休暇申込をデータベースに追加
                     RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,startDate,startTime,endDate,endTime,leaveType,reason))
                         .enqueue(object : Callback<BaseResponse<UserHolidayAcquireRes>> {
                             override fun onResponse(
@@ -201,17 +186,14 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                             ) {
                                 response?.let {
                                     if(it.body().data != null) {
-//                                Toast.makeText(
-//                                    requireContext(),
-//                                    "${it.body().message}",
-//                                    Toast.LENGTH_SHORT).show()
-
+//                                      休暇申込が成功したかを確認
                                         if(it.body().status == "200"){
+//                                          休暇申込が成功のメッセージを表示
                                             Toast.makeText(
                                                 requireContext(),
                                                 "${it.body().message}",
                                                 Toast.LENGTH_SHORT).show()
-
+//                                          入力内容を初期化する
                                             binding.startDate.setText("日付を選択")
                                             binding.startTime.setText("時間を選択")
                                             binding.endDate.setText("日付を選択")
@@ -229,6 +211,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                                         }
 
                                     }else {
+//                                      休暇申込が失敗のメッセージを表示
                                         Toast.makeText(
                                             requireContext(),
                                             "${it.body().message}",
