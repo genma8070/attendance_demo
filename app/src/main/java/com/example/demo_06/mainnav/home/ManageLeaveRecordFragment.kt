@@ -10,14 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.demo_06.R
 import com.example.demo_06.base.BaseFragment
-import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
-import com.example.demo_06.databinding.FragmentEmployeeLeaveRecordBinding
-import com.example.demo_06.databinding.FragmentHomeBinding
 import com.example.demo_06.databinding.FragmentManageLeaveRecordBinding
 import com.example.demo_06.mainnav.accountPublic
 import com.example.demo_06.model.HolidayRecordInfo
@@ -105,11 +98,11 @@ class ManageLeaveRecordFragment: BaseFragment<FragmentManageLeaveRecordBinding, 
 //          テーブルの各列を画面幅に均等に分割
             it.isStretchAllColumns = true
 //          ユーザーのアカウントを取得
-            var regAuthor = accountPublic
+            val regAuthor = accountPublic
 //          APIから休暇記録を取得
             RequestBuilder().getAPI(User::class.java).holidayRecord(HolidayRecordInfo(regAuthor))
                 .enqueue(object : Callback<BaseResponse<List<UserHolidayRecordRes>>> {
-                    @SuppressLint("ResourceType")
+                    @SuppressLint("ResourceType", "SetTextI18n")
                     override fun onResponse(
                         call: Call<BaseResponse<List<UserHolidayRecordRes>>>?,
                         response: Response<BaseResponse<List<UserHolidayRecordRes>>>?
@@ -193,7 +186,7 @@ class ManageLeaveRecordFragment: BaseFragment<FragmentManageLeaveRecordBinding, 
                             }else {
                                 Toast.makeText(
                                     requireContext(),
-                                    "${it.body().message}",
+                                    it.body().message,
                                     Toast.LENGTH_SHORT).show()
                             }
                         }

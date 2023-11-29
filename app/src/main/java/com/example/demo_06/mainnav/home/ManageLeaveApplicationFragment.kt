@@ -1,5 +1,6 @@
 package com.example.demo_06.mainnav.home
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -7,13 +8,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.InputFilter
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.demo_06.R
 import com.example.demo_06.base.BaseFragment
-import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
-import com.example.demo_06.databinding.FragmentHomeBinding
 import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
 import com.example.demo_06.mainnav.accountPublic
 import com.example.demo_06.model.HolidayAcquireInfo
@@ -33,6 +28,7 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
     PublicViewModel::class.java,
     true
 ){
+    @SuppressLint("SetTextI18n")
     override fun initFragment(
         binding: FragmentManageLeaveApplicationBinding,
         viewModel: PublicViewModel?,
@@ -53,11 +49,11 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
 //          選択した日付を表示する
             DatePickerDialog(it.context,
-                { view, year0, month0, day0->
+                { _, year0, month0, day0->
                     val year: String = String.format("%04d",year0)
                     val month: String = String.format("%02d",month0+1)
                     val day: String = String.format("%02d",day0)
-                    binding.startDate?.setText(year+"-"+month+"-"+day)
+                    binding.startDate?.text = "$year-$month-$day"
                 }, year0, month0, day0
             ).show()
         }
@@ -69,10 +65,10 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
             val minute0: Int = calendar.get(Calendar.MINUTE)
 //          選択した時間を表示する
             TimePickerDialog(it.context,
-                { view, hourOfDay0, minute0 ->
+                { _, hourOfDay0, minute0 ->
                     val month: String = String.format("%02d",hourOfDay0)
                     val day: String = String.format("%02d",minute0)
-                    binding.startTime?.setText(month+":"+day)
+                    binding.startTime?.text = "$month:$day"
                 }, hourOfDay0, minute0, true
             ).show()
         }
@@ -85,11 +81,11 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
 //          選択した日付を表示する
             DatePickerDialog(it.context,
-                { view, year0, month0, day0->
+                { _, year0, month0, day0->
                     val year: String = String.format("%04d",year0)
                     val month: String = String.format("%02d",month0+1)
                     val day: String = String.format("%02d",day0)
-                    binding.endDate?.setText(year+"-"+month+"-"+day)
+                    binding.endDate?.text = "$year-$month-$day"
                 }, year0, month0, day0
             ).show()
         }
@@ -101,10 +97,10 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
             val minute0: Int = calendar.get(Calendar.MINUTE)
 //          選択した時間を表示する
             TimePickerDialog(it.context,
-                { view, hourOfDay0, minute0 ->
+                { _, hourOfDay0, minute0 ->
                     val month: String = String.format("%02d",hourOfDay0)
                     val day: String = String.format("%02d",minute0)
-                    binding.endTime?.setText(month+":"+day)
+                    binding.endTime?.text = "$month:$day"
                 }, hourOfDay0, minute0, true
             ).show()
         }
@@ -160,15 +156,15 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
 
 //      休暇申込をデータベースに追加
         binding.leaveSubmit.setOnClickListener{
-            var personalNo = accountPublic
-            var startDate = binding.startDate.text.toString()
-            var startTime = binding.startTime.text.toString()
-            var endDate = binding.endDate.text.toString()
-            var endTime = binding.endTime.text.toString()
-            var leaveType = leaveTypeTemp
-            var reason = binding.reason.text.toString()
+            val personalNo = accountPublic
+            val startDate = binding.startDate.text.toString()
+            val startTime = binding.startTime.text.toString()
+            val endDate = binding.endDate.text.toString()
+            val endTime = binding.endTime.text.toString()
+            val leaveType = leaveTypeTemp
+            val reason = binding.reason.text.toString()
 //          休暇申込の再確認
-            AlertDialog.Builder(getActivity())
+            AlertDialog.Builder(activity)
                 .setTitle("申込確認")
                 .setMessage("本当に申込ますか")
                 .setPositiveButton("確認"){_, _ ->
@@ -186,13 +182,13 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
 //                                          休暇申込が成功のメッセージを表示
                                             Toast.makeText(
                                                 requireContext(),
-                                                "${it.body().message}",
+                                                it.body().message,
                                                 Toast.LENGTH_SHORT).show()
 //                                          入力内容を初期化する
-                                            binding.startDate.setText("日付を選択")
-                                            binding.startTime.setText("時間を選択")
-                                            binding.endDate.setText("日付を選択")
-                                            binding.endTime.setText("時間を選択")
+                                            binding.startDate.text = "日付を選択"
+                                            binding.startTime.text = "時間を選択"
+                                            binding.endDate.text = "日付を選択"
+                                            binding.endTime.text = "時間を選択"
                                             binding.holidayType1.setBackgroundColor(Color.parseColor("#0000FF"))
                                             binding.holidayType1.setTextColor(Color.parseColor("#FFFFFF"))
                                             binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
@@ -209,7 +205,7 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
 //                                      休暇申込が失敗のメッセージを表示
                                         Toast.makeText(
                                             requireContext(),
-                                            "${it.body().message}",
+                                            it.body().message,
                                             Toast.LENGTH_SHORT).show()
                                     }
                                 }
@@ -229,7 +225,7 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
     }
 
     //  入力制限
-    val Filter = InputFilter { source, start, end, dest, dstart, dend ->
+    val Filter = InputFilter { source, _, _, _, _, _ ->
         val p = Pattern.compile(".+")
         val m = p.matcher(source.toString())
         if (!m.matches()) "" else null

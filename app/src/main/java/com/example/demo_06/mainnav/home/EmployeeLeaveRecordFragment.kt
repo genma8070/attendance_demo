@@ -5,10 +5,7 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
-import android.view.Gravity
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -16,12 +13,10 @@ import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveRecordBinding
 import com.example.demo_06.mainnav.accountPublic
-import com.example.demo_06.model.HolidayAcquireInfo
 import com.example.demo_06.model.HolidayRecordInfo
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
-import com.example.demo_06.network.res.UserHolidayAcquireRes
 import com.example.demo_06.network.res.UserHolidayRecordRes
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
 import retrofit2.Call
@@ -105,11 +100,11 @@ class EmployeeLeaveRecordFragment: BaseFragment<FragmentEmployeeLeaveRecordBindi
 //          テーブルの各列を画面幅に均等に分割
             it.isStretchAllColumns = true
 //          ユーザーのアカウントを取得
-            var regAuthor = accountPublic
+            val regAuthor = accountPublic
 //          APIから休暇記録を取得
             RequestBuilder().getAPI(User::class.java).holidayRecord(HolidayRecordInfo(regAuthor))
                 .enqueue(object : Callback<BaseResponse<List<UserHolidayRecordRes>>> {
-                    @SuppressLint("ResourceType")
+                    @SuppressLint("ResourceType", "SetTextI18n")
                     override fun onResponse(
                         call: Call<BaseResponse<List<UserHolidayRecordRes>>>?,
                         response: Response<BaseResponse<List<UserHolidayRecordRes>>>?
@@ -193,7 +188,7 @@ class EmployeeLeaveRecordFragment: BaseFragment<FragmentEmployeeLeaveRecordBindi
                             }else {
                                 Toast.makeText(
                                     requireContext(),
-                                    "${it.body().message}",
+                                    it.body().message,
                                     Toast.LENGTH_SHORT).show()
                             }
                         }

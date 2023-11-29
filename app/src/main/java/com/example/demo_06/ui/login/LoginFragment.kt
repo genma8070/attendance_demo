@@ -94,7 +94,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
     }
 
 //  入力制限（英語と数字しか入力できる）
-    val Filter = InputFilter { source, start, end, _, _, _ ->
+    private val Filter = InputFilter { source, start, end, _, _, _ ->
         val p = Pattern.compile("[0-9a-zA-Z]+")
 
 //      デリートの判断
