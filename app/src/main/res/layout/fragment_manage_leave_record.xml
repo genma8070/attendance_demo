@@ -6,78 +6,49 @@
     android:orientation="vertical"
     android:paddingLeft="10dp" android:paddingRight="10dp" android:paddingTop="10dp">
 
-
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:divider="@color/black"
+        android:showDividers="middle"
+        android:dividerPadding="10dp"
         android:stretchColumns="0">
-
         <TableRow>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:text="開始日時"/>
+                android:text="開始時刻"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:text="終了日時　"/>
+                android:text="終了時刻"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:text="状態　　　　"/>
+                android:text="ステータス"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:text="詳細"/>
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="現場審查中"/>
-            <Button
-                android:id="@+id/btn_record_detail_03"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="詳細01"/>
-        </TableRow>
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="23/11/8"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="現場審查中"/>
-            <Button
-                android:id="@+id/btn_record_detail_04"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="詳細02"/>
+                android:text="更新時刻"/>
         </TableRow>
     </TableLayout>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent" android:scrollbarStyle="insideOverlay" android:scrollbars="vertical">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="@color/black"
+            android:showDividers="middle"
+            android:dividerPadding="10dp"
+            android:stretchColumns="0"
+            android:id="@+id/tableLayout1">
+
+        </TableLayout>
+    </ScrollView>
 
 </LinearLayout>

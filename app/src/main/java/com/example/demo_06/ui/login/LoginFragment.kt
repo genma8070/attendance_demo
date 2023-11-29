@@ -36,8 +36,8 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
         binding.passwordInput.filters = arrayOf<InputFilter>(Filter,InputFilter.LengthFilter(20))
 
         binding.loginBtn.setOnClickListener{
-            var account = binding.accountInput.text.toString()
-            var password = binding.passwordInput.text.toString()
+            val account = binding.accountInput.text.toString()
+            val password = binding.passwordInput.text.toString()
 
             RequestBuilder().getAPI(User::class.java).login(LoginInfo(account,password))
                 .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
@@ -51,7 +51,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                                 Log.e("TAG","onResponse:${it.code()}")
                                 Toast.makeText(
                                     requireContext(),
-                                    "${it.body().message}",
+                                    it.body().message,
                                     Toast.LENGTH_SHORT).show()
 
                                 if(it.body().status == "200"){
@@ -77,7 +77,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                             }else {
                                 Toast.makeText(
                                     requireContext(),
-                                    "${it.body().message}",
+                                    it.body().message,
                                     Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -94,7 +94,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
     }
 
 //  入力制限（英語と数字しか入力できる）
-    val Filter = InputFilter { source, start, end, dest, dstart, dend ->
+    val Filter = InputFilter { source, start, end, _, _, _ ->
         val p = Pattern.compile("[0-9a-zA-Z]+")
 
 //      デリートの判断
