@@ -25,7 +25,7 @@ interface User {
     @POST("user/holiday_acquire")
     fun holidayAcquire(@Body holidayAcquireInfo: HolidayAcquireInfo): Call<BaseResponse<UserHolidayAcquireRes>>
 
-
+    //  休暇記録
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/holiday_record")
     fun holidayRecord(@Body holidayRecordInfo: HolidayRecordInfo): Call<BaseResponse<List<UserHolidayRecordRes>>>
