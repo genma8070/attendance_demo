@@ -31,18 +31,6 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
         viewModel: ViewModel?,
         savedInstanceState: Bundle?
     ) {
-//        binding.loginBtnEmployee.setOnClickListener{
-//            findNavController().navigate(
-//                R.id.employeeNavFragment,
-//                null,
-//                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
-//        }
-//        binding.loginBtnManage.setOnClickListener{
-//            findNavController().navigate(
-//                R.id.manageNavFragment,
-//                null,
-//                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
-//        }
 
         binding.accountInput.filters = arrayOf<InputFilter>(Filter,InputFilter.LengthFilter(9))
         binding.passwordInput.filters = arrayOf<InputFilter>(Filter,InputFilter.LengthFilter(20))
@@ -61,11 +49,6 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                             if(it.body().data != null) {
                                 Log.e("TAG","onResponse:${it.body().data.toString()}")
                                 Log.e("TAG","onResponse:${it.code()}")
-//                                Log.e("TAG","onResponse:${it.message()}")
-//                                Log.e("TAG","onResponse(code):${it.body().data?.password.toString()}")
-//                                Log.e("TAG","onResponse(code):${it.body().data?.account.toString()}")
-//                                Log.e("TAG","onResponse(message):${it.body().data?.name.toString()}")
-//                                Log.e("TAG","onResponse:${it.body().data}")
                                 Toast.makeText(
                                     requireContext(),
                                     "${it.body().message}",
@@ -105,10 +88,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                     }
 
                 })
-//            findNavController().navigate(
-//                R.id.mainNavFragment,
-//                null,
-//                NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
+
         }
 
     }
@@ -116,14 +96,27 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
 //  入力制限（英語と数字しか入力できる）
     val Filter = InputFilter { source, start, end, dest, dstart, dend ->
         val p = Pattern.compile("[0-9a-zA-Z]+")
+
+//      デリートの判断
+        val isDeleting = start > 0 && end == 0 && source?.isEmpty() == true
+//      デリートの場合は、操作を許可する
+        if (isDeleting) {
+            return@InputFilter null
+        }
+
+//      英語と数字しか入力できません
         val m = p.matcher(source.toString())
-        val s = p.matcher(source[0].toString())
-        if (!s.matches())
-            Toast.makeText(
-                requireContext(),
-                "英語と数字しか入力できません",
-                Toast.LENGTH_SHORT).show()
-        if (!m.matches()) "" else null
+        if (!m.matches()) {
+//            Toast.makeText(
+//                requireContext(),
+//                "英語と数字しか入力できません",
+//                Toast.LENGTH_SHORT
+//            ).show()
+            return@InputFilter ""
+        }
+
+//      操作を許可する
+        null
     }
 
 }
