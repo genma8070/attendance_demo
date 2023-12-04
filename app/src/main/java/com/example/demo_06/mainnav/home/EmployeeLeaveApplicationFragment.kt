@@ -42,20 +42,47 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
         binding.reason.filters = arrayOf<InputFilter>(Filter, InputFilter.LengthFilter(50))
 
 //      開始日付を選択
-        binding.startDate.setOnClickListener{
+        binding.startDate.setOnClickListener {
             val calendar: Calendar = Calendar.getInstance()
             val year0: Int = calendar.get(Calendar.YEAR)
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
-//          選択した日付を表示する
-            DatePickerDialog(it.context,
-                { _, year0, month0, day0->
-                    val year: String = String.format("%04d",year0)
-                    val month: String = String.format("%02d",month0+1)
-                    val day: String = String.format("%02d",day0)
-                    binding.startDate?.text = "$year-$month-$day"
-                }, year0, month0, day0
-            ).show()
+
+            // 設定最小日期
+            val datePickerDialog = DatePickerDialog(
+                it.context,
+                { _, year0, month0, day0 ->
+                    val selectedCalendar = Calendar.getInstance()
+                    selectedCalendar.set(Calendar.YEAR, year0)
+                    selectedCalendar.set(Calendar.MONTH, month0)
+                    selectedCalendar.set(Calendar.DAY_OF_MONTH, day0)
+
+                    // 檢查是否選擇了今天之前的日期
+                    if (selectedCalendar.before(Calendar.getInstance())) {
+                        // 提示使用者選擇今天之後的日期
+                        Toast.makeText(
+                            requireContext(),
+                            "請選擇今天之後的日期",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        // 選擇的日期在今天之後，更新顯示
+                        val year: String = String.format("%04d", year0)
+                        val month: String = String.format("%02d", month0 + 1)
+                        val day: String = String.format("%02d", day0)
+                        binding.startDate?.text = "$year-$month-$day"
+                    }
+                },
+                year0,
+                month0,
+                day0
+            )
+
+            // 設定最小日期
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
+
+            // 顯示日期選擇對話框
+            datePickerDialog.show()
         }
 
 //      開始時間を選択
@@ -74,20 +101,47 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
         }
 
 //      終了日付を選択
-        binding.endDate.setOnClickListener{
+        binding.endDate.setOnClickListener {
             val calendar: Calendar = Calendar.getInstance()
             val year0: Int = calendar.get(Calendar.YEAR)
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
-//          選択した日付を表示する
-            DatePickerDialog(it.context,
-                { _, year0, month0, day0->
-                    val year: String = String.format("%04d",year0)
-                    val month: String = String.format("%02d",month0+1)
-                    val day: String = String.format("%02d",day0)
-                    binding.endDate?.text = "$year-$month-$day"
-                }, year0, month0, day0
-            ).show()
+
+            // 設定最小日期
+            val datePickerDialog = DatePickerDialog(
+                it.context,
+                { _, year0, month0, day0 ->
+                    val selectedCalendar = Calendar.getInstance()
+                    selectedCalendar.set(Calendar.YEAR, year0)
+                    selectedCalendar.set(Calendar.MONTH, month0)
+                    selectedCalendar.set(Calendar.DAY_OF_MONTH, day0)
+
+                    // 檢查是否選擇了今天之前的日期
+                    if (selectedCalendar.before(Calendar.getInstance())) {
+                        // 提示使用者選擇今天之後的日期
+                        Toast.makeText(
+                            requireContext(),
+                            "請選擇今天之後的日期",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        // 選擇的日期在今天之後，更新顯示
+                        val year: String = String.format("%04d", year0)
+                        val month: String = String.format("%02d", month0 + 1)
+                        val day: String = String.format("%02d", day0)
+                        binding.startDate?.text = "$year-$month-$day"
+                    }
+                },
+                year0,
+                month0,
+                day0
+            )
+
+            // 設定最小日期
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
+
+            // 顯示日期選擇對話框
+            datePickerDialog.show()
         }
 
 //      終了時間を選択
