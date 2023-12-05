@@ -4,9 +4,18 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputFilter
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.NumberPicker
+import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
@@ -23,7 +32,7 @@ import retrofit2.Response
 import java.util.Calendar
 import java.util.regex.Pattern
 
-class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplicationBinding, PublicViewModel>(
+class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment<FragmentEmployeeLeaveApplicationBinding, PublicViewModel>(
     FragmentEmployeeLeaveApplicationBinding::inflate,
     PublicViewModel::class.java,
     true
@@ -86,18 +95,54 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
         }
 
 //      開始時間を選択
-        binding.startTime.setOnClickListener{
-            val calendar: Calendar = Calendar.getInstance()
-            val hourOfDay0: Int = calendar.get(Calendar.HOUR)
-            val minute0: Int = calendar.get(Calendar.MINUTE)
-//          選択した時間を表示する
-            TimePickerDialog(it.context,
-                { _, hourOfDay0, minute0 ->
-                    val month: String = String.format("%02d",hourOfDay0)
-                    val day: String = String.format("%02d",minute0)
-                    binding.startTime?.text = "$month:$day"
-                }, hourOfDay0, minute0, true
-            ).show()
+        binding.startTime.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            var hourOfDay0: Int = calendar.get(Calendar.HOUR_OF_DAY)
+            var minute0: Int = calendar.get(Calendar.MINUTE)
+
+            // 创建对话框
+            val dialog = AlertDialog.Builder(it.context)
+            dialog.setTitle("選擇時間")
+
+            val ll = LinearLayout(it.context)
+            ll.orientation = LinearLayout.HORIZONTAL
+            ll.gravity = Gravity.CENTER
+
+            val hourPicker = NumberPicker(it.context)
+            hourPicker.minValue = 0
+            hourPicker.maxValue = 23
+            hourPicker.value = hourOfDay0
+
+            val minutePicker = NumberPicker(it.context)
+            val minuteInterval = 15
+            val displayedValues = Array(60 / minuteInterval) { i ->
+                String.format("%02d", i * minuteInterval)
+            }
+            minutePicker.minValue = 0
+            minutePicker.maxValue = displayedValues.size - 1
+            minutePicker.displayedValues = displayedValues
+            minutePicker.value = minute0 / minuteInterval
+
+            ll.addView(hourPicker)
+            // 添加一个冒号
+            ll.addView(TextView(it.context).apply { text = ":" })
+            ll.addView(minutePicker)
+
+            dialog.setView(ll)
+
+            dialog.setPositiveButton("確定") { _, _ ->
+                // 在确认时更新小时和分钟的值
+                hourOfDay0 = hourPicker.value
+                minute0 = minutePicker.value * minuteInterval
+                // 在设置文本时添加冒号
+                val selectedTime = String.format("%02d:%02d", hourOfDay0, minute0)
+                binding.startTime.text = selectedTime
+            }
+
+            dialog.setNegativeButton("取消", null)
+
+            val alertDialog = dialog.create()
+            alertDialog.show()
         }
 
 //      終了日付を選択
@@ -129,7 +174,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                         val year: String = String.format("%04d", year0)
                         val month: String = String.format("%02d", month0 + 1)
                         val day: String = String.format("%02d", day0)
-                        binding.startDate?.text = "$year-$month-$day"
+                        binding.endDate?.text = "$year-$month-$day"
                     }
                 },
                 year0,
@@ -146,17 +191,53 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 
 //      終了時間を選択
         binding.endTime.setOnClickListener{
-            val calendar: Calendar = Calendar.getInstance()
-            val hourOfDay0: Int = calendar.get(Calendar.HOUR)
-            val minute0: Int = calendar.get(Calendar.MINUTE)
-//          選択した時間を表示する
-            TimePickerDialog(it.context,
-                { _, hourOfDay0, minute0 ->
-                    val month: String = String.format("%02d",hourOfDay0)
-                    val day: String = String.format("%02d",minute0)
-                    binding.endTime?.text = "$month:$day"
-                }, hourOfDay0, minute0, true
-            ).show()
+            val calendar = Calendar.getInstance()
+            var hourOfDay0: Int = calendar.get(Calendar.HOUR_OF_DAY)
+            var minute0: Int = calendar.get(Calendar.MINUTE)
+
+            // 创建对话框
+            val dialog = AlertDialog.Builder(it.context)
+            dialog.setTitle("選擇時間")
+
+            val ll = LinearLayout(it.context)
+            ll.orientation = LinearLayout.HORIZONTAL
+            ll.gravity = Gravity.CENTER
+
+            val hourPicker = NumberPicker(it.context)
+            hourPicker.minValue = 0
+            hourPicker.maxValue = 23
+            hourPicker.value = hourOfDay0
+
+            val minutePicker = NumberPicker(it.context)
+            val minuteInterval = 15
+            val displayedValues = Array(60 / minuteInterval) { i ->
+                String.format("%02d", i * minuteInterval)
+            }
+            minutePicker.minValue = 0
+            minutePicker.maxValue = displayedValues.size - 1
+            minutePicker.displayedValues = displayedValues
+            minutePicker.value = minute0 / minuteInterval
+
+            ll.addView(hourPicker)
+            // 添加一个冒号
+            ll.addView(TextView(it.context).apply { text = ":" })
+            ll.addView(minutePicker)
+
+            dialog.setView(ll)
+
+            dialog.setPositiveButton("確定") { _, _ ->
+                // 在确认时更新小时和分钟的值
+                hourOfDay0 = hourPicker.value
+                minute0 = minutePicker.value * minuteInterval
+                // 在设置文本时添加冒号
+                val selectedTime = String.format("%02d:%02d", hourOfDay0, minute0)
+                binding.endTime.text = selectedTime
+            }
+
+            dialog.setNegativeButton("取消", null)
+
+            val alertDialog = dialog.create()
+            alertDialog.show()
         }
 
 //      休暇タイプをタイプ1に表示
