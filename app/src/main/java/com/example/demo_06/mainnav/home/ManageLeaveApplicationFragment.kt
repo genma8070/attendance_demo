@@ -7,6 +7,10 @@ import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputFilter
+import android.view.Gravity
+import android.widget.LinearLayout
+import android.widget.NumberPicker
+import android.widget.TextView
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
@@ -42,67 +46,195 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
         binding.reason.filters = arrayOf<InputFilter>(Filter, InputFilter.LengthFilter(50))
 
 //      開始日付を選択
-        binding.startDate.setOnClickListener{
+        binding.startDate.setOnClickListener {
             val calendar: Calendar = Calendar.getInstance()
             val year0: Int = calendar.get(Calendar.YEAR)
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
-//          選択した日付を表示する
-            DatePickerDialog(it.context,
-                { _, year0, month0, day0->
-                    val year: String = String.format("%04d",year0)
-                    val month: String = String.format("%02d",month0+1)
-                    val day: String = String.format("%02d",day0)
-                    binding.startDate?.text = "$year-$month-$day"
-                }, year0, month0, day0
-            ).show()
+
+//          開始日付を選択
+            val datePickerDialog = DatePickerDialog(
+                it.context,
+                { _, year0, month0, day0 ->
+                    val selectedCalendar = Calendar.getInstance()
+                    selectedCalendar.set(Calendar.YEAR, year0)
+                    selectedCalendar.set(Calendar.MONTH, month0)
+                    selectedCalendar.set(Calendar.DAY_OF_MONTH, day0)
+
+                    // 本日以降を選択した場合
+                    if(!selectedCalendar.before(Calendar.getInstance())) {
+                        val year: String = String.format("%04d", year0)
+                        val month: String = String.format("%02d", month0 + 1)
+                        val day: String = String.format("%02d", day0)
+                        binding.startDate?.text = "$year-$month-$day"
+                    }
+                },
+                year0,
+                month0,
+                day0
+            )
+
+            // 設定可能の日付を本日以降にする
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
+
+            datePickerDialog.show()
         }
 
 //      開始時間を選択
-        binding.startTime.setOnClickListener{
-            val calendar: Calendar = Calendar.getInstance()
-            val hourOfDay0: Int = calendar.get(Calendar.HOUR)
-            val minute0: Int = calendar.get(Calendar.MINUTE)
-//          選択した時間を表示する
-            TimePickerDialog(it.context,
-                { _, hourOfDay0, minute0 ->
-                    val month: String = String.format("%02d",hourOfDay0)
-                    val day: String = String.format("%02d",minute0)
-                    binding.startTime?.text = "$month:$day"
-                }, hourOfDay0, minute0, true
-            ).show()
+        binding.startTime.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            var hourOfDay0: Int = calendar.get(Calendar.HOUR_OF_DAY)
+            var minute0: Int = calendar.get(Calendar.MINUTE)
+
+//          ポップアップを設定
+            val dialog = AlertDialog.Builder(it.context)
+            dialog.setTitle("時間を選択")
+
+//          レイアウトを設定
+            val ll = LinearLayout(it.context)
+            ll.orientation = LinearLayout.HORIZONTAL
+            ll.gravity = Gravity.CENTER
+
+//          時間を設定
+            val hourPicker = NumberPicker(it.context)
+            hourPicker.minValue = 0
+            hourPicker.maxValue = 23
+            hourPicker.value = hourOfDay0
+
+//          分を設定、間隔は15分
+            val minutePicker = NumberPicker(it.context)
+            val minuteInterval = 15
+            val displayedValues = Array(60 / minuteInterval) { i ->
+                String.format("%02d", i * minuteInterval)
+            }
+//          分を0　15　30　45に設定
+            minutePicker.minValue = 0
+            minutePicker.maxValue = displayedValues.size - 1
+            minutePicker.displayedValues = displayedValues
+            minutePicker.value = minute0 / minuteInterval
+
+//          時間の選択
+            ll.addView(hourPicker)
+//          ：
+            ll.addView(TextView(it.context).apply { text = ":" })
+//          分の選択
+            ll.addView(minutePicker)
+
+//          レイアウトを画面に追加
+            dialog.setView(ll)
+
+//          確認ボタンを設定
+            dialog.setPositiveButton("確認") { _, _ ->
+//              選択した時間と分を取得
+                hourOfDay0 = hourPicker.value
+                minute0 = minutePicker.value * minuteInterval
+//              選択した時間と分を更新
+                val selectedTime = String.format("%02d:%02d", hourOfDay0, minute0)
+                binding.startTime.text = selectedTime
+            }
+
+//          キャンセルボタンを設定
+            dialog.setNegativeButton("キャンセル", null)
+
+//          ポップアップを画面に表示
+            val alertDialog = dialog.create()
+            alertDialog.show()
         }
 
 //      終了日付を選択
-        binding.endDate.setOnClickListener{
+        binding.endDate.setOnClickListener {
             val calendar: Calendar = Calendar.getInstance()
             val year0: Int = calendar.get(Calendar.YEAR)
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
-//          選択した日付を表示する
-            DatePickerDialog(it.context,
-                { _, year0, month0, day0->
-                    val year: String = String.format("%04d",year0)
-                    val month: String = String.format("%02d",month0+1)
-                    val day: String = String.format("%02d",day0)
-                    binding.endDate?.text = "$year-$month-$day"
-                }, year0, month0, day0
-            ).show()
+
+//          終了日付を選択
+            val datePickerDialog = DatePickerDialog(
+                it.context,
+                { _, year0, month0, day0 ->
+                    val selectedCalendar = Calendar.getInstance()
+                    selectedCalendar.set(Calendar.YEAR, year0)
+                    selectedCalendar.set(Calendar.MONTH, month0)
+                    selectedCalendar.set(Calendar.DAY_OF_MONTH, day0)
+
+                    // 本日以降を選択した場合
+                    if(!selectedCalendar.before(Calendar.getInstance())) {
+                        val year: String = String.format("%04d", year0)
+                        val month: String = String.format("%02d", month0 + 1)
+                        val day: String = String.format("%02d", day0)
+                        binding.endDate?.text = "$year-$month-$day"
+                    }
+                },
+                year0,
+                month0,
+                day0
+            )
+
+            // 設定可能の日付を本日以降にする
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
+
+            datePickerDialog.show()
         }
 
 //      終了時間を選択
         binding.endTime.setOnClickListener{
-            val calendar: Calendar = Calendar.getInstance()
-            val hourOfDay0: Int = calendar.get(Calendar.HOUR)
-            val minute0: Int = calendar.get(Calendar.MINUTE)
-//          選択した時間を表示する
-            TimePickerDialog(it.context,
-                { _, hourOfDay0, minute0 ->
-                    val month: String = String.format("%02d",hourOfDay0)
-                    val day: String = String.format("%02d",minute0)
-                    binding.endTime?.text = "$month:$day"
-                }, hourOfDay0, minute0, true
-            ).show()
+            val calendar = Calendar.getInstance()
+            var hourOfDay0: Int = calendar.get(Calendar.HOUR_OF_DAY)
+            var minute0: Int = calendar.get(Calendar.MINUTE)
+
+//          ポップアップを設定
+            val dialog = AlertDialog.Builder(it.context)
+            dialog.setTitle("時間を選択")
+
+//          レイアウトを設定
+            val ll = LinearLayout(it.context)
+            ll.orientation = LinearLayout.HORIZONTAL
+            ll.gravity = Gravity.CENTER
+
+//          時間を設定
+            val hourPicker = NumberPicker(it.context)
+            hourPicker.minValue = 0
+            hourPicker.maxValue = 23
+            hourPicker.value = hourOfDay0
+
+//          分を設定、間隔は15分
+            val minutePicker = NumberPicker(it.context)
+            val minuteInterval = 15
+            val displayedValues = Array(60 / minuteInterval) { i ->
+                String.format("%02d", i * minuteInterval)
+            }
+//          分を0　15　30　45に設定
+            minutePicker.minValue = 0
+            minutePicker.maxValue = displayedValues.size - 1
+            minutePicker.displayedValues = displayedValues
+            minutePicker.value = minute0 / minuteInterval
+
+//          時間の選択
+            ll.addView(hourPicker)
+//          ：
+            ll.addView(TextView(it.context).apply { text = ":" })
+//          分の選択
+            ll.addView(minutePicker)
+
+//          レイアウトを画面に追加
+            dialog.setView(ll)
+
+//          確認ボタンを設定
+            dialog.setPositiveButton("確認") { _, _ ->
+//              選択した時間と分を取得
+                hourOfDay0 = hourPicker.value
+                minute0 = minutePicker.value * minuteInterval
+//              選択した時間と分を更新
+                val selectedTime = String.format("%02d:%02d", hourOfDay0, minute0)
+                binding.endTime.text = selectedTime
+            }
+
+//          キャンセルボタンを設定
+            dialog.setNegativeButton("キャンセル", null)
+
+//          ポップアップを画面に表示
+            val alertDialog = dialog.create()
+            alertDialog.show()
         }
 
 //      休暇タイプをタイプ1に表示
