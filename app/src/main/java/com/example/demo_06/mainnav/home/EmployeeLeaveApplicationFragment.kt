@@ -57,7 +57,7 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
 
-            // 設定最小日期
+//          開始日付を選択
             val datePickerDialog = DatePickerDialog(
                 it.context,
                 { _, year0, month0, day0 ->
@@ -66,16 +66,8 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
                     selectedCalendar.set(Calendar.MONTH, month0)
                     selectedCalendar.set(Calendar.DAY_OF_MONTH, day0)
 
-                    // 檢查是否選擇了今天之前的日期
-                    if (selectedCalendar.before(Calendar.getInstance())) {
-                        // 提示使用者選擇今天之後的日期
-                        Toast.makeText(
-                            requireContext(),
-                            "請選擇今天之後的日期",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        // 選擇的日期在今天之後，更新顯示
+                    // 本日以降を選択した場合
+                    if(!selectedCalendar.before(Calendar.getInstance())) {
                         val year: String = String.format("%04d", year0)
                         val month: String = String.format("%02d", month0 + 1)
                         val day: String = String.format("%02d", day0)
@@ -87,10 +79,9 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
                 day0
             )
 
-            // 設定最小日期
+            // 設定可能の日付を本日以降にする
             datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
 
-            // 顯示日期選擇對話框
             datePickerDialog.show()
         }
 
@@ -100,47 +91,57 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
             var hourOfDay0: Int = calendar.get(Calendar.HOUR_OF_DAY)
             var minute0: Int = calendar.get(Calendar.MINUTE)
 
-            // 创建对话框
+//          ポップアップを設定
             val dialog = AlertDialog.Builder(it.context)
-            dialog.setTitle("選擇時間")
+            dialog.setTitle("時間を選択")
 
+//          レイアウトを設定
             val ll = LinearLayout(it.context)
             ll.orientation = LinearLayout.HORIZONTAL
             ll.gravity = Gravity.CENTER
 
+//          時間を設定
             val hourPicker = NumberPicker(it.context)
             hourPicker.minValue = 0
             hourPicker.maxValue = 23
             hourPicker.value = hourOfDay0
 
+//          分を設定、間隔は15分
             val minutePicker = NumberPicker(it.context)
             val minuteInterval = 15
             val displayedValues = Array(60 / minuteInterval) { i ->
                 String.format("%02d", i * minuteInterval)
             }
+//          分を0　15　30　45に設定
             minutePicker.minValue = 0
             minutePicker.maxValue = displayedValues.size - 1
             minutePicker.displayedValues = displayedValues
             minutePicker.value = minute0 / minuteInterval
 
+//          時間の選択
             ll.addView(hourPicker)
-            // 添加一个冒号
+//          ：
             ll.addView(TextView(it.context).apply { text = ":" })
+//          分の選択
             ll.addView(minutePicker)
 
+//          レイアウトを画面に追加
             dialog.setView(ll)
 
-            dialog.setPositiveButton("確定") { _, _ ->
-                // 在确认时更新小时和分钟的值
+//          確認ボタンを設定
+            dialog.setPositiveButton("確認") { _, _ ->
+//              選択した時間と分を取得
                 hourOfDay0 = hourPicker.value
                 minute0 = minutePicker.value * minuteInterval
-                // 在设置文本时添加冒号
+//              選択した時間と分を更新
                 val selectedTime = String.format("%02d:%02d", hourOfDay0, minute0)
                 binding.startTime.text = selectedTime
             }
 
-            dialog.setNegativeButton("取消", null)
+//          キャンセルボタンを設定
+            dialog.setNegativeButton("キャンセル", null)
 
+//          ポップアップを画面に表示
             val alertDialog = dialog.create()
             alertDialog.show()
         }
@@ -152,7 +153,7 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
             val month0: Int = calendar.get(Calendar.MONTH)
             val day0: Int = calendar.get(Calendar.DAY_OF_MONTH)
 
-            // 設定最小日期
+//          終了日付を選択
             val datePickerDialog = DatePickerDialog(
                 it.context,
                 { _, year0, month0, day0 ->
@@ -161,16 +162,8 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
                     selectedCalendar.set(Calendar.MONTH, month0)
                     selectedCalendar.set(Calendar.DAY_OF_MONTH, day0)
 
-                    // 檢查是否選擇了今天之前的日期
-                    if (selectedCalendar.before(Calendar.getInstance())) {
-                        // 提示使用者選擇今天之後的日期
-                        Toast.makeText(
-                            requireContext(),
-                            "請選擇今天之後的日期",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        // 選擇的日期在今天之後，更新顯示
+                    // 本日以降を選択した場合
+                    if(!selectedCalendar.before(Calendar.getInstance())) {
                         val year: String = String.format("%04d", year0)
                         val month: String = String.format("%02d", month0 + 1)
                         val day: String = String.format("%02d", day0)
@@ -182,10 +175,9 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
                 day0
             )
 
-            // 設定最小日期
+            // 設定可能の日付を本日以降にする
             datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
 
-            // 顯示日期選擇對話框
             datePickerDialog.show()
         }
 
@@ -195,47 +187,57 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
             var hourOfDay0: Int = calendar.get(Calendar.HOUR_OF_DAY)
             var minute0: Int = calendar.get(Calendar.MINUTE)
 
-            // 创建对话框
+//          ポップアップを設定
             val dialog = AlertDialog.Builder(it.context)
-            dialog.setTitle("選擇時間")
+            dialog.setTitle("時間を選択")
 
+//          レイアウトを設定
             val ll = LinearLayout(it.context)
             ll.orientation = LinearLayout.HORIZONTAL
             ll.gravity = Gravity.CENTER
 
+//          時間を設定
             val hourPicker = NumberPicker(it.context)
             hourPicker.minValue = 0
             hourPicker.maxValue = 23
             hourPicker.value = hourOfDay0
 
+//          分を設定、間隔は15分
             val minutePicker = NumberPicker(it.context)
             val minuteInterval = 15
             val displayedValues = Array(60 / minuteInterval) { i ->
                 String.format("%02d", i * minuteInterval)
             }
+//          分を0　15　30　45に設定
             minutePicker.minValue = 0
             minutePicker.maxValue = displayedValues.size - 1
             minutePicker.displayedValues = displayedValues
             minutePicker.value = minute0 / minuteInterval
 
+//          時間の選択
             ll.addView(hourPicker)
-            // 添加一个冒号
+//          ：
             ll.addView(TextView(it.context).apply { text = ":" })
+//          分の選択
             ll.addView(minutePicker)
 
+//          レイアウトを画面に追加
             dialog.setView(ll)
 
-            dialog.setPositiveButton("確定") { _, _ ->
-                // 在确认时更新小时和分钟的值
+//          確認ボタンを設定
+            dialog.setPositiveButton("確認") { _, _ ->
+//              選択した時間と分を取得
                 hourOfDay0 = hourPicker.value
                 minute0 = minutePicker.value * minuteInterval
-                // 在设置文本时添加冒号
+//              選択した時間と分を更新
                 val selectedTime = String.format("%02d:%02d", hourOfDay0, minute0)
                 binding.endTime.text = selectedTime
             }
 
-            dialog.setNegativeButton("取消", null)
+//          キャンセルボタンを設定
+            dialog.setNegativeButton("キャンセル", null)
 
+//          ポップアップを画面に表示
             val alertDialog = dialog.create()
             alertDialog.show()
         }
