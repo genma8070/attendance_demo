@@ -14,7 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
-import com.example.demo_06.mainnav.accountPublic
+
+import com.example.demo_06.mainnav.accountPublic0
 import com.example.demo_06.model.HolidayAcquireInfo
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
@@ -288,7 +289,7 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
 
 //      休暇申込をデータベースに追加
         binding.leaveSubmit.setOnClickListener{
-            val personalNo = accountPublic
+            val personalNo = accountPublic0
             val startDate = binding.startDate.text.toString()
             val startTime = binding.startTime.text.toString()
             val endDate = binding.endDate.text.toString()

@@ -11,7 +11,7 @@ import com.example.demo_06.R
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeNavBinding
 
-var accountPublic=""
+var accountPublic0=""
 
 class EmployeeNavFragment: BaseFragment<FragmentEmployeeNavBinding, ViewModel>(
     FragmentEmployeeNavBinding::inflate,
@@ -30,7 +30,7 @@ class EmployeeNavFragment: BaseFragment<FragmentEmployeeNavBinding, ViewModel>(
 //                value
 //            }
             if (value != null) {
-                accountPublic = value
+                accountPublic0 = value
             }
         }
 
@@ -43,7 +43,7 @@ class EmployeeNavFragment: BaseFragment<FragmentEmployeeNavBinding, ViewModel>(
 //        }
 
         binding.btnLogout.setOnClickListener{
-            accountPublic = ""
+            accountPublic0 = ""
             findNavController().navigate(
                 R.id.loginFragment,
                 null,

@@ -4,22 +4,18 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.TextView
-import android.widget.TimePicker
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
-import com.example.demo_06.mainnav.accountPublic
+import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
+import com.example.demo_06.mainnav.accountPublic0
 import com.example.demo_06.model.HolidayAcquireInfo
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
@@ -32,7 +28,7 @@ import retrofit2.Response
 import java.util.Calendar
 import java.util.regex.Pattern
 
-class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment<FragmentEmployeeLeaveApplicationBinding, PublicViewModel>(
+class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplicationBinding, PublicViewModel>(
     FragmentEmployeeLeaveApplicationBinding::inflate,
     PublicViewModel::class.java,
     true
@@ -293,7 +289,7 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
 
 //      休暇申込をデータベースに追加
         binding.leaveSubmit.setOnClickListener{
-            val personalNo = accountPublic
+            val personalNo = accountPublic0
             val startDate = binding.startDate.text.toString()
             val startTime = binding.startTime.text.toString()
             val endDate = binding.endDate.text.toString()
@@ -319,7 +315,7 @@ class EmployeeLeaveApplicationFragment<View : android.view.View?> : BaseFragment
 //                                          休暇申込が成功のメッセージを表示
                                             Toast.makeText(
                                                 requireContext(),
-                                                "${it.body().message}",
+                                                it.body().message,
                                                 Toast.LENGTH_SHORT).show()
 //                                          入力内容を初期化する
                                             binding.startDate.text = "日付を選択"
