@@ -28,7 +28,7 @@ class ManageNavFragment: BaseFragment<FragmentManageNavBinding, ViewModel>(
 //                value
 //            }
             if (value != null) {
-                accountPublic = value
+                accountPublic0 = value
             }
         }
 
@@ -37,7 +37,7 @@ class ManageNavFragment: BaseFragment<FragmentManageNavBinding, ViewModel>(
         }
 
         binding.btnLogout.setOnClickListener{
-            accountPublic = ""
+            accountPublic0 = ""
             findNavController().navigate(
                 R.id.loginFragment,
                 null,

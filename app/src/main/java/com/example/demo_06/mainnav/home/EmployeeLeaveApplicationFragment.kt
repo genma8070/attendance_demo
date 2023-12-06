@@ -1,5 +1,6 @@
 package com.example.demo_06.mainnav.home
 
+import android.R
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -8,7 +9,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.Gravity
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +27,8 @@ import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
 import com.example.demo_06.network.res.UserHolidayAcquireRes
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,8 +50,96 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 //      休暇タイプ
         var leaveTypeTemp = "私用"
 
+//      APIから当社員の所属現場を検索
+        var workSpotFromAPI = arrayOf("現場1", "現場2")//臨時データ
+        var workSpotChecked = BooleanArray(10)
+//        var workSpot = JSONObject()
+        var counter = 0
+        for (item in workSpotFromAPI) {
+//            workSpot.append(item, false)
+            workSpotChecked[counter] = false
+            counter++
+        }
+//        var workSpot02 = workSpot.optJSONArray("現場2")?.getBoolean(0)
+//        if(!workSpot02!!){
+//            Toast.makeText(
+//                requireContext(),
+//                workSpot02.toString(),
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
+
 //      休暇理由を50字以内に制限
         binding.reason.filters = arrayOf<InputFilter>(Filter, InputFilter.LengthFilter(50))
+
+//      現場を選択
+        binding.selectWorkSpot.setOnClickListener {
+//          現場
+            val workSpotOptions = workSpotFromAPI
+//          現場の選択状態
+            val checkedItems = workSpotChecked
+
+//          レイアウトを設定
+            val layout = LinearLayout(requireContext())
+            layout.orientation = LinearLayout.VERTICAL
+
+//          現場リストのレイアウト設定
+            val listView = ListView(requireContext())
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, workSpotOptions)
+
+//          全て選択用のチェックボックス
+            val checkBoxSelectAll = CheckBox(requireContext())
+            checkBoxSelectAll.text = "全て選択"
+            checkBoxSelectAll.isChecked = checkedItems.all { it }
+            checkBoxSelectAll.setOnCheckedChangeListener { _, isChecked ->
+                for (i in 0 until checkedItems.size) {
+                    checkedItems[i] = isChecked
+                }
+//              チェック状態の更新
+                for (i in 0 until checkedItems.size) {
+                    listView.setItemChecked(i, isChecked)
+                }
+//              リスト更新用
+                adapter.notifyDataSetChanged()
+            }
+
+            layout.addView(checkBoxSelectAll)
+
+//          ListViewを追加
+            listView.adapter = adapter
+            listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+
+//          チェック状態の初期化
+            for (i in 0 until checkedItems.size) {
+                listView.setItemChecked(i, checkedItems[i])
+            }
+
+//          レイアウトに追加
+            layout.addView(listView)
+
+//          ポップアップを設定
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setView(layout)
+                .setPositiveButton("確認") { _, _ ->
+//                  全ての現場をリストに追加
+                    val selectedWorkSpots = mutableListOf<String>()
+                    for (i in workSpotOptions.indices) {
+                        if (checkedItems[i]) {
+                            selectedWorkSpots.add(workSpotOptions[i])
+                        }
+                    }
+//                  確認用のメッセージ
+                    Toast.makeText(
+                        requireContext(),
+                        "選択： ${selectedWorkSpots.joinToString(", ")}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                .setNegativeButton("キャンセル", null)
+
+            val dialog = builder.create()
+            dialog.show()
+        }
 
 //      開始日付を選択
         binding.startDate.setOnClickListener {

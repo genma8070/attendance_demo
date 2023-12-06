@@ -12,7 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveRecordBinding
-import com.example.demo_06.mainnav.accountPublic
+import com.example.demo_06.mainnav.accountPublic0
 import com.example.demo_06.model.HolidayRecordInfo
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
@@ -100,7 +100,7 @@ class EmployeeLeaveRecordFragment: BaseFragment<FragmentEmployeeLeaveRecordBindi
 //          テーブルの各列を画面幅に均等に分割
             it.isStretchAllColumns = true
 //          ユーザーのアカウントを取得
-            val regAuthor = accountPublic
+            val regAuthor = accountPublic0
 //          APIから休暇記録を取得
             RequestBuilder().getAPI(User::class.java).holidayRecord(HolidayRecordInfo(regAuthor))
                 .enqueue(object : Callback<BaseResponse<List<UserHolidayRecordRes>>> {
