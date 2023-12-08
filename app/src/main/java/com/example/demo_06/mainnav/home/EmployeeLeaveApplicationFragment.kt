@@ -74,68 +74,79 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 
 //      現場を選択
         binding.selectWorkSpot.setOnClickListener {
-//          現場
+            // 現場
             val workSpotOptions = workSpotFromAPI
-//          現場の選択状態
+
+            // 現場の選択状態
             val checkedItems = workSpotChecked
 
-//          レイアウトを設定
+            // レイアウトを設定
             val layout = LinearLayout(requireContext())
             layout.orientation = LinearLayout.VERTICAL
 
-//          現場リストのレイアウト設定
+            // 現場リストのレイアウト設定
             val listView = ListView(requireContext())
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, workSpotOptions)
 
-//          全て選択用のチェックボックス
+            // 全て選択用のチェックボックス
             val checkBoxSelectAll = CheckBox(requireContext())
             checkBoxSelectAll.text = "全て選択"
             checkBoxSelectAll.isChecked = checkedItems.all { it }
+// ListView的點擊監聽器
+            listView.setOnItemClickListener { _, _, position, _ ->
+                // 點擊時更新勾選狀態數組
+                checkedItems[position] = !checkedItems[position]
+
+                // 更新全選CheckBox的狀態
+                checkBoxSelectAll.isChecked = checkedItems.all { it }
+
+                // 更新適配器
+                adapter.notifyDataSetChanged()
+            }
+
+// 用於選擇或取消全選的CheckBox的監聽器
             checkBoxSelectAll.setOnCheckedChangeListener { _, isChecked ->
                 for (i in 0 until checkedItems.size) {
                     checkedItems[i] = isChecked
                 }
-//              チェック状態の更新
+                // 更新ListView的所有項目的勾選狀態
                 for (i in 0 until checkedItems.size) {
                     listView.setItemChecked(i, isChecked)
                 }
-//              リスト更新用
+                // 更新適配器
                 adapter.notifyDataSetChanged()
             }
 
             layout.addView(checkBoxSelectAll)
 
-//          ListViewを追加
+            // ListViewを追加
             listView.adapter = adapter
             listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
 
-//          チェック状態の初期化
+            // チェック状態の初期化
             for (i in 0 until checkedItems.size) {
                 listView.setItemChecked(i, checkedItems[i])
             }
 
-//          レイアウトに追加
+            // レイアウトに追加
             layout.addView(listView)
 
-//          ポップアップを設定
+            // ポップアップを設定
             val builder = AlertDialog.Builder(requireContext())
             builder.setView(layout)
                 .setPositiveButton("確認") { _, _ ->
-//                  全ての現場をリストに追加
+                    // 全ての現場をリストに追加
                     val selectedWorkSpots = mutableListOf<String>()
+                    val showWorkSpot = binding.showWorkSpot
                     for (i in workSpotOptions.indices) {
                         if (checkedItems[i]) {
                             selectedWorkSpots.add(workSpotOptions[i])
                         }
                     }
-//                  確認用のメッセージ
-                    Toast.makeText(
-                        requireContext(),
-                        "選択： ${selectedWorkSpots.joinToString(", ")}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showWorkSpot.text = selectedWorkSpots.joinToString(", ")
+
                 }
-                .setNegativeButton("キャンセル", null)
+                .setNegativeButton("改修", null)
 
             val dialog = builder.create()
             dialog.show()

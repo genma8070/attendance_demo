@@ -26,6 +26,13 @@
             android:backgroundTint="@color/material_dynamic_neutral70"
             android:textColor="@color/black"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:id="@+id/show_work_spot"/>
+
+
     </LinearLayout>
 
     <TextView
