@@ -1,16 +1,13 @@
 package com.example.demo_06.mainnav.home
 
-import android.R
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.Gravity
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.ListView
@@ -19,16 +16,16 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
-import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
 import com.example.demo_06.mainnav.accountPublic0
 import com.example.demo_06.model.HolidayAcquireInfo
+import com.example.demo_06.model.WorkSpotReq
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
 import com.example.demo_06.network.res.UserHolidayAcquireRes
+import com.example.demo_06.network.res.SearchBelongWorkSpotRes
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
 import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,27 +48,60 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
         var leaveTypeTemp = "私用"
 
 //      APIから当社員の所属現場を検索
-        var workSpotFromAPI = arrayOf("現場1", "現場2")//臨時データ
+//        var workSpotFromAPI = arrayOf("現場1", "現場2")//臨時データ
+        var workSpotFromAPI = mutableListOf<String>()
         var workSpotChecked = BooleanArray(10)
-//        var workSpot = JSONObject()
-        var counter = 0
-        for (item in workSpotFromAPI) {
-//            workSpot.append(item, false)
-            workSpotChecked[counter] = false
-            counter++
-        }
         var selectedWorkSpots = mutableListOf<String>()
-//        var workSpot02 = workSpot.optJSONArray("現場2")?.getBoolean(0)
-//        if(!workSpot02!!){
-//            Toast.makeText(
-//                requireContext(),
-//                workSpot02.toString(),
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        }
 
 //      休暇理由を50字以内に制限
         binding.reason.filters = arrayOf<InputFilter>(Filter, InputFilter.LengthFilter(50))
+
+        val personalNo = accountPublic0
+//                  APIに接続し、休暇申込をデータベースに追加
+        RequestBuilder().getAPI(User::class.java).WorkSpot(WorkSpotReq(personalNo))
+            .enqueue(object : Callback<BaseResponse<SearchBelongWorkSpotRes>> {
+                override fun onResponse(
+                    call: Call<BaseResponse<SearchBelongWorkSpotRes>>?,
+                    response: Response<BaseResponse<SearchBelongWorkSpotRes>>?
+                ) {
+                    response?.let {
+                        if(it.body().data != null) {
+//                                      休暇申込が成功したかを確認
+                            if(it.body().status == "200"){
+//                                          休暇申込が成功のメッセージを表示
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    it.body().message,
+//                                    Toast.LENGTH_SHORT).show()
+
+                                var counter = 0
+                                for(item in it.body().data!!.workSpotInfo){
+//                                    Toast.makeText(
+//                                        requireContext(),
+//                                        item.workSpotComNm,
+//                                        Toast.LENGTH_SHORT).show()
+                                    workSpotFromAPI.add(item.workSpotComNm)
+                                    workSpotChecked[counter] = false
+                                    counter++
+                                }
+
+                            }
+
+                        }else {
+//                                      休暇申込が失敗のメッセージを表示
+                            Toast.makeText(
+                                requireContext(),
+                                it.body().message,
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<BaseResponse<SearchBelongWorkSpotRes>>?, t: Throwable?) {
+//                        Log.e("TAG","NetWorkErr!")
+                }
+
+            })
 
 //      現場を選択
         binding.selectWorkSpot.setOnClickListener {

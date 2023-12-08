@@ -3,15 +3,16 @@ package com.example.demo_06.network.api
 import com.example.demo_06.model.HolidayAcquireInfo
 import com.example.demo_06.model.HolidayRecordInfo
 import com.example.demo_06.model.LoginInfo
+import com.example.demo_06.model.WorkSpotReq
 import com.example.demo_06.network.res.BaseResponse
 import com.example.demo_06.network.res.UserHolidayAcquireRes
 import com.example.demo_06.network.res.UserHolidayRecordRes
 import com.example.demo_06.network.res.UserLoginRes
+import com.example.demo_06.network.res.SearchBelongWorkSpotRes
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
-import java.lang.invoke.MethodHandleInfo
 
 interface User {
 
@@ -19,6 +20,11 @@ interface User {
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/login")
     fun login(@Body loginInfo: LoginInfo): Call<BaseResponse<UserLoginRes>>
+
+    //  休暇申込
+    @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
+    @POST("user/search_belong_work_spot")
+    fun WorkSpot(@Body workSpotInfo: WorkSpotReq): Call<BaseResponse<SearchBelongWorkSpotRes>>
 
 //  休暇申込
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
