@@ -47,8 +47,10 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 //      休暇タイプ
         var leaveTypeTemp = "私用"
 
-//      APIから当社員の所属現場を検索
-//        var workSpotFromAPI = arrayOf("現場1", "現場2")//臨時データ
+//      社員番号
+        val personalNo = accountPublic0
+
+//      担当現場用
         var workSpotFromAPI = mutableListOf<String>()
         var workSpotChecked = BooleanArray(10)
         var selectedWorkSpots = mutableListOf<String>()
@@ -56,8 +58,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 //      休暇理由を50字以内に制限
         binding.reason.filters = arrayOf<InputFilter>(Filter, InputFilter.LengthFilter(50))
 
-        val personalNo = accountPublic0
-//                  APIに接続し、休暇申込をデータベースに追加
+//      APIに接続し、担当現場を検索
         RequestBuilder().getAPI(User::class.java).WorkSpot(WorkSpotReq(personalNo))
             .enqueue(object : Callback<BaseResponse<SearchBelongWorkSpotRes>> {
                 override fun onResponse(
@@ -66,20 +67,12 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                 ) {
                     response?.let {
                         if(it.body().data != null) {
-//                                      休暇申込が成功したかを確認
+//                          休暇申込が成功したかを確認
                             if(it.body().status == "200"){
-//                                          休暇申込が成功のメッセージを表示
-//                                Toast.makeText(
-//                                    requireContext(),
-//                                    it.body().message,
-//                                    Toast.LENGTH_SHORT).show()
 
+//                              現場を設定
                                 var counter = 0
                                 for(item in it.body().data!!.workSpotInfo){
-//                                    Toast.makeText(
-//                                        requireContext(),
-//                                        item.workSpotComNm,
-//                                        Toast.LENGTH_SHORT).show()
                                     workSpotFromAPI.add(item.workSpotComNm)
                                     workSpotChecked[counter] = false
                                     counter++
@@ -87,12 +80,6 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 
                             }
 
-                        }else {
-//                                      休暇申込が失敗のメッセージを表示
-                            Toast.makeText(
-                                requireContext(),
-                                it.body().message,
-                                Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -124,51 +111,53 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             val checkBoxSelectAll = CheckBox(requireContext())
             checkBoxSelectAll.text = "全て選択"
             checkBoxSelectAll.isChecked = checkedItems.all { it }
-// ListView的點擊監聽器
+
+//          現場を選択
             listView.setOnItemClickListener { _, _, position, _ ->
-                // 點擊時更新勾選狀態數組
+//              選択状態を更新
                 checkedItems[position] = !checkedItems[position]
 
-                // 更新全選CheckBox的狀態
+//              現場を全て選択(或は取消)の状態更新
                 checkBoxSelectAll.isChecked = checkedItems.all { it }
 
-                // 更新適配器
+//              アダプターの状態更新
                 adapter.notifyDataSetChanged()
             }
 
-// 用於選擇或取消全選的CheckBox的監聽器
+//          現場を全て選択(或は取消)
             checkBoxSelectAll.setOnCheckedChangeListener { _, isChecked ->
+//              全て選択か取消を設定
                 for (i in 0 until checkedItems.size) {
                     checkedItems[i] = isChecked
                 }
-                // 更新ListView的所有項目的勾選狀態
+//              選択状態の画面表示を更新
                 for (i in 0 until checkedItems.size) {
                     listView.setItemChecked(i, isChecked)
                 }
-                // 更新適配器
+//              アダプターの状態更新
                 adapter.notifyDataSetChanged()
             }
 
+//          全て選択用のチェックボックスをレイアウトに追加
             layout.addView(checkBoxSelectAll)
 
-            // ListViewを追加
+//          現場リストのアダプターとチョイスモードを設定
             listView.adapter = adapter
             listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
 
-            // チェック状態の初期化
+//          チェック状態の初期化
             for (i in 0 until checkedItems.size) {
                 listView.setItemChecked(i, checkedItems[i])
             }
 
-            // レイアウトに追加
+//          レイアウトに現場リストを追加
             layout.addView(listView)
 
-            // ポップアップを設定
+//          ポップアップを設定
             val builder = AlertDialog.Builder(requireContext())
             builder.setView(layout)
                 .setPositiveButton("確認") { _, _ ->
-                    // 全ての現場をリストに追加
-//                    selectedWorkSpots = mutableListOf<String>()
+//                  全ての現場をリストに追加
                     val showWorkSpot = binding.showWorkSpot
                     for (i in workSpotOptions.indices) {
                         if (checkedItems[i]) {
@@ -213,7 +202,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                 day0
             )
 
-            // 設定可能の日付を本日以降にする
+//          設定可能の日付を本日以降にする
             datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
 
             datePickerDialog.show()
@@ -309,7 +298,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                 day0
             )
 
-            // 設定可能の日付を本日以降にする
+//          設定可能の日付を本日以降にする
             datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000 // 限制最小日期為今天
 
             datePickerDialog.show()
@@ -423,12 +412,6 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             binding.holidayType4.setBackgroundColor(Color.parseColor("#0000FF"))
             binding.holidayType4.setTextColor(Color.parseColor("#FFFFFF"))
             leaveTypeTemp = "他"
-        }
-
-        fun MutableListToJsonArray(list: MutableList<String>): JSONArray {
-            val jsonArray = JSONArray()
-            list.forEach { jsonArray.put(it) }
-            return jsonArray
         }
 
 //      休暇申込をデータベースに追加

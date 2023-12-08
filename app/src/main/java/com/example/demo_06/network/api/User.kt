@@ -21,7 +21,7 @@ interface User {
     @POST("user/login")
     fun login(@Body loginInfo: LoginInfo): Call<BaseResponse<UserLoginRes>>
 
-    //  休暇申込
+//  担当現場
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/search_belong_work_spot")
     fun WorkSpot(@Body workSpotInfo: WorkSpotReq): Call<BaseResponse<SearchBelongWorkSpotRes>>
@@ -31,7 +31,7 @@ interface User {
     @POST("user/holiday_acquire")
     fun holidayAcquire(@Body holidayAcquireInfo: HolidayAcquireInfo): Call<BaseResponse<UserHolidayAcquireRes>>
 
-    //  休暇記録
+//  休暇記録
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/holiday_record")
     fun holidayRecord(@Body holidayRecordInfo: HolidayRecordInfo): Call<BaseResponse<List<UserHolidayRecordRes>>>
