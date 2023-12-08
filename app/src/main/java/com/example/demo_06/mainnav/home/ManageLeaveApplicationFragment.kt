@@ -1,5 +1,6 @@
 package com.example.demo_06.mainnav.home
 
+import android.R
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -8,13 +9,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.Gravity
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
+import com.example.demo_06.databinding.FragmentEmployeeLeaveApplicationBinding
 import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
-
 import com.example.demo_06.mainnav.accountPublic0
 import com.example.demo_06.model.HolidayAcquireInfo
 import com.example.demo_06.network.RequestBuilder
@@ -22,6 +27,8 @@ import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
 import com.example.demo_06.network.res.UserHolidayAcquireRes
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,8 +50,108 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
 //      休暇タイプ
         var leaveTypeTemp = "私用"
 
+//      APIから当社員の所属現場を検索
+        var workSpotFromAPI = arrayOf("現場1", "現場2")//臨時データ
+        var workSpotChecked = BooleanArray(10)
+//        var workSpot = JSONObject()
+        var counter = 0
+        for (item in workSpotFromAPI) {
+//            workSpot.append(item, false)
+            workSpotChecked[counter] = false
+            counter++
+        }
+        val selectedWorkSpots = mutableListOf<String>()
+//        var workSpot02 = workSpot.optJSONArray("現場2")?.getBoolean(0)
+//        if(!workSpot02!!){
+//            Toast.makeText(
+//                requireContext(),
+//                workSpot02.toString(),
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
+
 //      休暇理由を50字以内に制限
         binding.reason.filters = arrayOf<InputFilter>(Filter, InputFilter.LengthFilter(50))
+
+//      現場を選択
+        binding.selectWorkSpot.setOnClickListener {
+            // 現場
+            val workSpotOptions = workSpotFromAPI
+
+            // 現場の選択状態
+            val checkedItems = workSpotChecked
+
+            // レイアウトを設定
+            val layout = LinearLayout(requireContext())
+            layout.orientation = LinearLayout.VERTICAL
+
+            // 現場リストのレイアウト設定
+            val listView = ListView(requireContext())
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, workSpotOptions)
+
+            // 全て選択用のチェックボックス
+            val checkBoxSelectAll = CheckBox(requireContext())
+            checkBoxSelectAll.text = "全て選択"
+            checkBoxSelectAll.isChecked = checkedItems.all { it }
+// ListView的點擊監聽器
+            listView.setOnItemClickListener { _, _, position, _ ->
+                // 點擊時更新勾選狀態數組
+                checkedItems[position] = !checkedItems[position]
+
+                // 更新全選CheckBox的狀態
+                checkBoxSelectAll.isChecked = checkedItems.all { it }
+
+                // 更新適配器
+                adapter.notifyDataSetChanged()
+            }
+
+// 用於選擇或取消全選的CheckBox的監聽器
+            checkBoxSelectAll.setOnCheckedChangeListener { _, isChecked ->
+                for (i in 0 until checkedItems.size) {
+                    checkedItems[i] = isChecked
+                }
+                // 更新ListView的所有項目的勾選狀態
+                for (i in 0 until checkedItems.size) {
+                    listView.setItemChecked(i, isChecked)
+                }
+                // 更新適配器
+                adapter.notifyDataSetChanged()
+            }
+
+            layout.addView(checkBoxSelectAll)
+
+            // ListViewを追加
+            listView.adapter = adapter
+            listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+
+            // チェック状態の初期化
+            for (i in 0 until checkedItems.size) {
+                listView.setItemChecked(i, checkedItems[i])
+            }
+
+            // レイアウトに追加
+            layout.addView(listView)
+
+            // ポップアップを設定
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setView(layout)
+                .setPositiveButton("確認") { _, _ ->
+                    // 全ての現場をリストに追加
+//                    selectedWorkSpots = mutableListOf<String>()
+                    val showWorkSpot = binding.showWorkSpot
+                    for (i in workSpotOptions.indices) {
+                        if (checkedItems[i]) {
+                            selectedWorkSpots.add(workSpotOptions[i])
+                        }
+                    }
+                    showWorkSpot.text = selectedWorkSpots.joinToString(", ")
+
+                }
+                .setNegativeButton("改修", null)
+
+            val dialog = builder.create()
+            dialog.show()
+        }
 
 //      開始日付を選択
         binding.startDate.setOnClickListener {
@@ -287,9 +394,16 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
             leaveTypeTemp = "他"
         }
 
+        fun MutableListToJsonArray(list: MutableList<String>): JSONArray {
+            val jsonArray = JSONArray()
+            list.forEach { jsonArray.put(it) }
+            return jsonArray
+        }
+
 //      休暇申込をデータベースに追加
         binding.leaveSubmit.setOnClickListener{
             val personalNo = accountPublic0
+            val showWorkSpot = selectedWorkSpots.toTypedArray()
             val startDate = binding.startDate.text.toString()
             val startTime = binding.startTime.text.toString()
             val endDate = binding.endDate.text.toString()
@@ -302,7 +416,7 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
                 .setMessage("本当に申込ますか")
                 .setPositiveButton("確認"){_, _ ->
 //                  APIに接続し、休暇申込をデータベースに追加
-                    RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,startDate,startTime,endDate,endTime,leaveType,reason))
+                    RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,showWorkSpot,startDate,startTime,endDate,endTime,leaveType,reason))
                         .enqueue(object : Callback<BaseResponse<UserHolidayAcquireRes>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<UserHolidayAcquireRes>>?,

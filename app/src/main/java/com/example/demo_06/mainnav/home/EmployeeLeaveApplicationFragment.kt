@@ -60,6 +60,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             workSpotChecked[counter] = false
             counter++
         }
+        var selectedWorkSpots = mutableListOf<String>()
 //        var workSpot02 = workSpot.optJSONArray("現場2")?.getBoolean(0)
 //        if(!workSpot02!!){
 //            Toast.makeText(
@@ -74,6 +75,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 
 //      現場を選択
         binding.selectWorkSpot.setOnClickListener {
+            selectedWorkSpots = mutableListOf<String>()
             // 現場
             val workSpotOptions = workSpotFromAPI
 
@@ -136,7 +138,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             builder.setView(layout)
                 .setPositiveButton("確認") { _, _ ->
                     // 全ての現場をリストに追加
-                    val selectedWorkSpots = mutableListOf<String>()
+//                    selectedWorkSpots = mutableListOf<String>()
                     val showWorkSpot = binding.showWorkSpot
                     for (i in workSpotOptions.indices) {
                         if (checkedItems[i]) {
@@ -393,9 +395,16 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             leaveTypeTemp = "他"
         }
 
+        fun MutableListToJsonArray(list: MutableList<String>): JSONArray {
+            val jsonArray = JSONArray()
+            list.forEach { jsonArray.put(it) }
+            return jsonArray
+        }
+
 //      休暇申込をデータベースに追加
         binding.leaveSubmit.setOnClickListener{
             val personalNo = accountPublic0
+            val showWorkSpot = selectedWorkSpots.toTypedArray()
             val startDate = binding.startDate.text.toString()
             val startTime = binding.startTime.text.toString()
             val endDate = binding.endDate.text.toString()
@@ -408,7 +417,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                 .setMessage("本当に申込ますか")
                 .setPositiveButton("確認"){_, _ ->
 //                  APIに接続し、休暇申込をデータベースに追加
-                    RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,startDate,startTime,endDate,endTime,leaveType,reason))
+                    RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,showWorkSpot,startDate,startTime,endDate,endTime,leaveType,reason))
                         .enqueue(object : Callback<BaseResponse<UserHolidayAcquireRes>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<UserHolidayAcquireRes>>?,
@@ -424,6 +433,8 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                                                 it.body().message,
                                                 Toast.LENGTH_SHORT).show()
 //                                          入力内容を初期化する
+                                            binding.showWorkSpot.text=""
+                                            selectedWorkSpots = mutableListOf<String>()
                                             binding.startDate.text = "日付を選択"
                                             binding.startTime.text = "時間を選択"
                                             binding.endDate.text = "日付を選択"
