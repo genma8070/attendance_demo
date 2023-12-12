@@ -1,6 +1,6 @@
 package com.example.demo_06.model
 
-data class HolidayAcquireInfo(
+data class HolidayAcquireReq(
     val personalNo: String="",
     val selectedWorkSpot: Array<String>?,
     val startDate: String="",

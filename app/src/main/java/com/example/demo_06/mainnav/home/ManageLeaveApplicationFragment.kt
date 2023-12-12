@@ -14,7 +14,7 @@ import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentManageLeaveApplicationBinding
 import com.example.demo_06.mainnav.accountPublic0
-import com.example.demo_06.model.HolidayAcquireInfo
+import com.example.demo_06.model.HolidayAcquireReq
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
@@ -305,7 +305,7 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
                 .setMessage("本当に申込ますか")
                 .setPositiveButton("確認"){_, _ ->
 //                  APIに接続し、休暇申込をデータベースに追加
-                    RequestBuilder().getAPI(User::class.java).holidayAcquire(HolidayAcquireInfo(personalNo,showWorkSpot,startDate,startTime,endDate,endTime,leaveType,reason))
+                    RequestBuilder().getAPI(User::class.java).HolidayAcquire(HolidayAcquireReq(personalNo,showWorkSpot,startDate,startTime,endDate,endTime,leaveType,reason))
                         .enqueue(object : Callback<BaseResponse<UserHolidayAcquireRes>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<UserHolidayAcquireRes>>?,

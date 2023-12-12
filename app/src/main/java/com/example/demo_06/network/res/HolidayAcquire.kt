@@ -7,8 +7,9 @@ package com.example.demo_06.network.res
 //    val nickname: String,
 //)
 
-data class UserHolidayRecordRes (
+data class HolidayAcquire (
     val calendarNo: String="",
+    val selectedWorkSpot: String="",
     val startYear: String="",
     val startMonth: String="",
     val startDay: String="",

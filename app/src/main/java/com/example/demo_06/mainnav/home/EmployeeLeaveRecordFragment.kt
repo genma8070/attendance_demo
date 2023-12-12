@@ -13,11 +13,11 @@ import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeLeaveRecordBinding
 import com.example.demo_06.mainnav.accountPublic0
-import com.example.demo_06.model.HolidayRecordInfo
+import com.example.demo_06.model.HolidayRecordReq
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
-import com.example.demo_06.network.res.UserHolidayRecordRes
+import com.example.demo_06.network.res.HolidayAcquire
 import com.example.mvvm_learning.setruth.mvvmlearn.viewmodeled.PublicViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -102,12 +102,12 @@ class EmployeeLeaveRecordFragment: BaseFragment<FragmentEmployeeLeaveRecordBindi
 //          ユーザーのアカウントを取得
             val regAuthor = accountPublic0
 //          APIから休暇記録を取得
-            RequestBuilder().getAPI(User::class.java).holidayRecord(HolidayRecordInfo(regAuthor))
-                .enqueue(object : Callback<BaseResponse<List<UserHolidayRecordRes>>> {
+            RequestBuilder().getAPI(User::class.java).HolidayRecord(HolidayRecordReq(regAuthor))
+                .enqueue(object : Callback<BaseResponse<List<HolidayAcquire>>> {
                     @SuppressLint("ResourceType", "SetTextI18n")
                     override fun onResponse(
-                        call: Call<BaseResponse<List<UserHolidayRecordRes>>>?,
-                        response: Response<BaseResponse<List<UserHolidayRecordRes>>>?
+                        call: Call<BaseResponse<List<HolidayAcquire>>>?,
+                        response: Response<BaseResponse<List<HolidayAcquire>>>?
                     ) {
 //                      検索結果を確認
                         response?.let {
@@ -194,7 +194,7 @@ class EmployeeLeaveRecordFragment: BaseFragment<FragmentEmployeeLeaveRecordBindi
                         }
                     }
 
-                    override fun onFailure(call: Call<BaseResponse<List<UserHolidayRecordRes>>>?, t: Throwable?) {
+                    override fun onFailure(call: Call<BaseResponse<List<HolidayAcquire>>>?, t: Throwable?) {
 //                        Log.e("TAG","NetWorkErr!")
                     }
 

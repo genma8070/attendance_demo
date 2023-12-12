@@ -1,12 +1,13 @@
 package com.example.demo_06.network.api
 
-import com.example.demo_06.model.HolidayAcquireInfo
-import com.example.demo_06.model.HolidayRecordInfo
-import com.example.demo_06.model.LoginInfo
+import com.example.demo_06.model.HolidayAcquireReq
+import com.example.demo_06.model.HolidayRecordReq
+import com.example.demo_06.model.HolidayReviewReq
+import com.example.demo_06.model.LoginReq
 import com.example.demo_06.model.WorkSpotReq
 import com.example.demo_06.network.res.BaseResponse
 import com.example.demo_06.network.res.UserHolidayAcquireRes
-import com.example.demo_06.network.res.UserHolidayRecordRes
+import com.example.demo_06.network.res.HolidayAcquire
 import com.example.demo_06.network.res.UserLoginRes
 import com.example.demo_06.network.res.SearchBelongWorkSpotRes
 import retrofit2.Call
@@ -19,7 +20,7 @@ interface User {
 //  ログイン
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/login")
-    fun login(@Body loginInfo: LoginInfo): Call<BaseResponse<UserLoginRes>>
+    fun Login(@Body loginReq: LoginReq): Call<BaseResponse<UserLoginRes>>
 
 //  担当現場
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
@@ -29,11 +30,16 @@ interface User {
 //  休暇申込
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/holiday_acquire")
-    fun holidayAcquire(@Body holidayAcquireInfo: HolidayAcquireInfo): Call<BaseResponse<UserHolidayAcquireRes>>
+    fun HolidayAcquire(@Body holidayAcquireReq: HolidayAcquireReq): Call<BaseResponse<UserHolidayAcquireRes>>
 
 //  休暇記録
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/holiday_record")
-    fun holidayRecord(@Body holidayRecordInfo: HolidayRecordInfo): Call<BaseResponse<List<UserHolidayRecordRes>>>
+    fun HolidayRecord(@Body holidayRecordReq: HolidayRecordReq): Call<BaseResponse<List<HolidayAcquire>>>
+
+
+    @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
+    @POST("user/holiday_review")
+    fun HolidayReview(@Body holidayReviewReq: HolidayReviewReq): Call<BaseResponse<List<HolidayAcquire>>>
 
 }

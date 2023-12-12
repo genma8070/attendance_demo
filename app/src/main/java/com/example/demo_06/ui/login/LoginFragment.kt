@@ -6,12 +6,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.demo_06.R
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentLoginBinding
-import com.example.demo_06.model.LoginInfo
+import com.example.demo_06.model.LoginReq
 import com.example.demo_06.network.RequestBuilder
 import com.example.demo_06.network.api.User
 import com.example.demo_06.network.res.BaseResponse
@@ -39,7 +38,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
             val account = binding.accountInput.text.toString()
             val password = binding.passwordInput.text.toString()
 
-            RequestBuilder().getAPI(User::class.java).login(LoginInfo(account,password))
+            RequestBuilder().getAPI(User::class.java).Login(LoginReq(account,password))
                 .enqueue(object : Callback<BaseResponse<UserLoginRes>> {
                     override fun onResponse(
                         call: Call<BaseResponse<UserLoginRes>>?,

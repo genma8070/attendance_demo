@@ -1,6 +1,6 @@
 package com.example.demo_06.model
 
-data class HolidayRecordInfo (
+data class HolidayRecordReq (
     val regAuthor: String="",
 
 )
