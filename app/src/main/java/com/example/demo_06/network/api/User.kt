@@ -2,6 +2,8 @@ package com.example.demo_06.network.api
 
 import com.example.demo_06.model.HolidayAcquireReq
 import com.example.demo_06.model.HolidayRecordReq
+import com.example.demo_06.model.HolidayReviewAcceptReq
+import com.example.demo_06.model.HolidayReviewDeniedReq
 import com.example.demo_06.model.HolidayReviewReq
 import com.example.demo_06.model.LoginReq
 import com.example.demo_06.model.WorkSpotReq
@@ -41,5 +43,13 @@ interface User {
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/holiday_review")
     fun HolidayReview(@Body holidayReviewReq: HolidayReviewReq): Call<BaseResponse<List<HolidayAcquire>>>
+
+    @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
+    @POST("user/holiday_review_accept")
+    fun HolidayReviewAccept(@Body holidayReviewAcceptReq: HolidayReviewAcceptReq): Call<BaseResponse<String>>
+
+    @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
+    @POST("user/holiday_review_denied")
+    fun HolidayReviewDenied(@Body holidayReviewDeniedReq: HolidayReviewDeniedReq): Call<BaseResponse<String>>
 
 }
