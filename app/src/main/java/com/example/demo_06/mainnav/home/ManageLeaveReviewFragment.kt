@@ -140,7 +140,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 // 例如，你可以將 rejectReason 傳遞給後端進行處理
                 // ...
 
-                dialog.dismiss()
+                dialog.dismiss() 
             }
         }
 
