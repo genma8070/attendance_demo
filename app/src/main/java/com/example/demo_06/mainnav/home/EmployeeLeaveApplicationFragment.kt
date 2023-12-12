@@ -415,7 +415,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
         }
 
 //      休暇申込をデータベースに追加
-        binding.leaveSubmit.setOnClickListener{
+        binding.leaveSubmit.setOnClickListener{ 
             val personalNo = accountPublic0
             val showWorkSpot = selectedWorkSpots.toTypedArray()
             val startDate = binding.startDate.text.toString()
