@@ -8,7 +8,7 @@ package com.example.demo_06.network.res
 //)
 
 data class HolidayAcquire (
-    val calendarNo: String="",
+    val holidayAcquireNo: String="",
     val selectedWorkSpot: String="",
     val startYear: String="",
     val startMonth: String="",

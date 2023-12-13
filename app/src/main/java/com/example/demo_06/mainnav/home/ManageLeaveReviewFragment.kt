@@ -50,7 +50,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 //      ユーザーのアカウントを取得
         val myPersonalNo = accountPublic0
 
-//      ユーザーの権限を取得 
+//      ユーザーの権限を取得
         val myAppAuthority = appAuthorityPublic
 
 //      休暇種類の表示
@@ -74,7 +74,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
             endTime: String,
             vocationNo: String,
             reason: String,
-            calendarNo: String,
+            holidayAcquireNo: String,
             refusal: String
         ) {
 
@@ -137,7 +137,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -149,7 +149,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -161,7 +161,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -173,7 +173,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -262,7 +262,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -274,7 +274,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -286,7 +286,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -298,7 +298,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -446,7 +446,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                     if(myAppAuthority == "2"){
 
 //                  休暇申込を却下
-                        RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(calendarNo, rejectReason))
+                        RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(holidayAcquireNo, rejectReason))
                             .enqueue(object : Callback<BaseResponse<String>> {
                                 override fun onResponse(
                                     call: Call<BaseResponse<String>>?,
@@ -490,7 +490,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
 //                  休暇申込を却下
                         RequestBuilder().getAPI(User::class.java).HolidayFinalReviewDenied(
-                            HolidayFinalReviewDeniedReq(calendarNo)
+                            HolidayFinalReviewDeniedReq(holidayAcquireNo)
                         )
                             .enqueue(object : Callback<BaseResponse<String>> {
                                 override fun onResponse(
@@ -542,7 +542,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 if(myAppAuthority == "2"){
 
 //              休暇申込を承認
-                    RequestBuilder().getAPI(User::class.java).HolidayReviewAccept(HolidayReviewAcceptReq(calendarNo))
+                    RequestBuilder().getAPI(User::class.java).HolidayReviewAccept(HolidayReviewAcceptReq(holidayAcquireNo))
                         .enqueue(object : Callback<BaseResponse<String>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<String>>?,
@@ -584,7 +584,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 else if(myAppAuthority == "10"){
 
 //              休暇申込を承認
-                    RequestBuilder().getAPI(User::class.java).HolidayFinalReviewAccept(HolidayReviewAcceptReq(calendarNo))
+                    RequestBuilder().getAPI(User::class.java).HolidayFinalReviewAccept(HolidayReviewAcceptReq(holidayAcquireNo))
                         .enqueue(object : Callback<BaseResponse<String>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<String>>?,
@@ -695,7 +695,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -707,7 +707,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -719,7 +719,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -731,7 +731,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -815,7 +815,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -827,7 +827,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -839,7 +839,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
@@ -851,7 +851,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo,
+                                                            item.holidayAcquireNo,
                                                             item.refusal
                                                         )
                                                     }
