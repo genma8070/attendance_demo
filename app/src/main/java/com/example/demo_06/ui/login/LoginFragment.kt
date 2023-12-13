@@ -57,6 +57,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
 //                                  アカウントを次のページに伝達用
                                     val bundle = Bundle()
                                     bundle.putString("account", it.body().data?.personalNo)
+                                    bundle.putString("appAuthority", it.body().data?.appAuthority.toString())
 
                                     if(it.body().data?.appAuthority == 1) {
 
@@ -65,7 +66,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding,ViewModel>(
                                             bundle,
                                             NavOptions.Builder().setPopUpTo(R.id.loginFragment,true).build())
                                     }
-                                    else {
+                                    else if(it.body().data?.appAuthority == 2 || it.body().data?.appAuthority == 10) {
                                         findNavController().navigate(
                                             R.id.manageNavFragment,
                                             bundle,

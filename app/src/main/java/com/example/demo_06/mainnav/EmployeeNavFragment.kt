@@ -12,6 +12,7 @@ import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentEmployeeNavBinding
 
 var accountPublic0=""
+var appAuthorityPublic=""
 
 class EmployeeNavFragment: BaseFragment<FragmentEmployeeNavBinding, ViewModel>(
     FragmentEmployeeNavBinding::inflate,

@@ -23,12 +23,18 @@ class ManageNavFragment: BaseFragment<FragmentManageNavBinding, ViewModel>(
 
         arguments?.let {
             val value = it.getString("account")
-            binding.account.setText(value)
+            binding.account.text = value
 //            accountPublic.let {
 //                value
 //            }
             if (value != null) {
                 accountPublic0 = value
+            }
+
+            val value2 = it.getString("appAuthority")
+//            binding.account.text = value2
+            if (value2 != null) {
+                appAuthorityPublic = value2
             }
         }
 

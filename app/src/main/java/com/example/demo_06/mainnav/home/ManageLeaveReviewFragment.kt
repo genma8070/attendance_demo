@@ -17,6 +17,8 @@ import android.widget.Toast
 import com.example.demo_06.base.BaseFragment
 import com.example.demo_06.databinding.FragmentManageLeaveReviewBinding
 import com.example.demo_06.mainnav.accountPublic0
+import com.example.demo_06.mainnav.appAuthorityPublic
+import com.example.demo_06.model.HolidayFinalReviewDeniedReq
 import com.example.demo_06.model.HolidayReviewAcceptReq
 import com.example.demo_06.model.HolidayReviewDeniedReq
 import com.example.demo_06.model.HolidayReviewReq
@@ -48,6 +50,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 //      ユーザーのアカウントを取得
         val myPersonalNo = accountPublic0
 
+        val myAppAuthority = appAuthorityPublic
+
 //      休暇種類の表示
         fun vacationNoShow(vacationNo: String): String{
             if(vacationNo == "11"){
@@ -69,7 +73,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
             endTime: String,
             vocationNo: String,
             reason: String,
-            calendarNo: String
+            calendarNo: String,
+            refusal: String
         ) {
 
 //          審査後の画面更新
@@ -131,7 +136,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo
+                                                            item.calendarNo,
+                                                            item.refusal
                                                         )
                                                     }
                                                     member2.setOnClickListener {
@@ -142,7 +148,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo
+                                                            item.calendarNo,
+                                                            item.refusal
                                                         )
                                                     }
                                                     member3.setOnClickListener {
@@ -153,7 +160,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo
+                                                            item.calendarNo,
+                                                            item.refusal
                                                         )
                                                     }
                                                     member4.setOnClickListener {
@@ -164,7 +172,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                             item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
                                                             vacationNoShow(item.vacationNo),
                                                             item.reason,
-                                                            item.calendarNo
+                                                            item.calendarNo,
+                                                            item.refusal
                                                         )
                                                     }
 //                                                  テーブルを審査画面に追加
@@ -188,6 +197,131 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
                         override fun onFailure(call: Call<BaseResponse<List<HolidayAcquire>>>?, t: Throwable?) {
 //                        Log.e("TAG","NetWorkErr!")
+                        }
+
+                    })
+            }
+
+    //          審査後の画面更新
+            fun updateFinalList(){
+
+        //              画面の初期化
+                binding.tableLayout1.removeAllViews()
+        //              審査待ちの休暇申込を検索
+                RequestBuilder().getAPI(User::class.java).HolidayFinalReview()
+                    .enqueue(object : Callback<BaseResponse<List<HolidayAcquire>>> {
+                        @SuppressLint("ResourceType", "SetTextI18n")
+                        override fun onResponse(
+                            call: Call<BaseResponse<List<HolidayAcquire>>>?,
+                            response: Response<BaseResponse<List<HolidayAcquire>>>?
+                        ) {
+        //                          検索結果を確認
+                            response?.let {
+                                if(it.body().data != null) {
+                                    if(it.body().status == "200"){
+        //                                      検索結果ありの場合
+                                        if(it.body().data != null) {
+                                            it.body().data.let {
+
+                                                it?.forEach {item ->
+
+                                                    val row = TableRow(requireContext())
+                                                    row.setPadding(0, 40, 0, 40)
+        //                                                  現場をテーブルに加入
+                                                    val member1 = TextView(requireContext())
+                                                    member1.textSize = 20F
+                                                    member1.width = 90
+                                                    member1.text = item.selectedWorkSpot
+                                                    row.addView(member1)
+        //                                                  社員番号をテーブルに加入
+                                                    val member2 = TextView(requireContext())
+                                                    member2.textSize = 20F
+                                                    member2.width = 90
+                                                    member2.text = item.regAuthor
+                                                    row.addView(member2)
+        //                                                  開始時刻をテーブルに加入
+                                                    val member3 = TextView(requireContext())
+                                                    member3.textSize = 20F
+                                                    member3.width = 90
+                                                    member3.text = item.startYear.substring(2) + "/" + item.startMonth + "/" + item.startDay
+                                                    row.addView(member3)
+        //                                                  終了時刻をテーブルに加入
+                                                    val member4 = TextView(requireContext())
+                                                    member4.textSize = 20F
+                                                    member4.width = 90
+                                                    member4.text = item.endYear.substring(2) + "/" + item.endMonth + "/" + item.endDay
+                                                    row.addView(member4)
+
+        //                                                  検索結果のクリックで詳細画面を表示
+                                                    member1.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member2.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member3.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member4.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+        //                                                  テーブルを審査画面に追加
+                                                    binding.tableLayout1.addView(row)
+
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+
+                                }else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        it.body().message,
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+
+                        override fun onFailure(call: Call<BaseResponse<List<HolidayAcquire>>>?, t: Throwable?) {
+        //                        Log.e("TAG","NetWorkErr!")
                         }
 
                     })
@@ -252,16 +386,41 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
             reasonTextView.textSize = 20F
             reasonTextView.text = reasonText
             linearLayout.addView(reasonTextView, params)
-//          拒絕理由のタイトルを設定
-            val rejectReasonText = SpannableString("却下理由     : ")
-            val rejectReasonTextView = TextView(requireContext())
-            rejectReasonTextView.textSize = 20F
-            rejectReasonTextView.text = rejectReasonText
-            linearLayout.addView(rejectReasonTextView, params)
-//          拒絕理由を設定
+
             val rejectReasonEditText = EditText(requireContext())
-            rejectReasonEditText.hint = "却下には却下理由が必要"
-            linearLayout.addView(rejectReasonEditText, params)
+            if(myAppAuthority == "2"){
+//          拒絕理由のタイトルを設定
+                val rejectReasonText = SpannableString("却下理由     : ")
+                val rejectReasonTextView = TextView(requireContext())
+                rejectReasonTextView.textSize = 20F
+                rejectReasonTextView.text = rejectReasonText
+                linearLayout.addView(rejectReasonTextView, params)
+//          拒絕理由を設定
+                rejectReasonEditText.hint = "却下には却下理由が必要"
+                linearLayout.addView(rejectReasonEditText, params)
+            }
+            else if(myAppAuthority == "10"){
+                if(refusal != null){
+                        val rejectText = SpannableString("現場審査     : 却下")
+                        val rejectTextView = TextView(requireContext())
+                        rejectTextView.textSize = 20F
+                        rejectTextView.text = rejectText
+                        linearLayout.addView(rejectTextView, params)
+//          拒絕理由のタイトルを設定
+                        val rejectReasonText = SpannableString("却下理由     : $refusal ")
+                        val rejectReasonTextView = TextView(requireContext())
+                        rejectReasonTextView.textSize = 20F
+                        rejectReasonTextView.text = rejectReasonText
+                        linearLayout.addView(rejectReasonTextView, params)
+                }
+                else{
+                    val rejectReasonText = SpannableString("現場審査     : 承認")
+                    val rejectReasonTextView = TextView(requireContext())
+                    rejectReasonTextView.textSize = 20F
+                    rejectReasonTextView.text = rejectReasonText
+                    linearLayout.addView(rejectReasonTextView, params)
+                }
+            }
 
 //          詳細画面にlinearLayoutと設定
             alertDialog.setView(linearLayout)
@@ -277,34 +436,131 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 val rejectReason = rejectReasonEditText.text.toString()
 
 //              却下理由をチェック
-                if(rejectReason.length > 50){
-                    Toast.makeText(requireContext(), "却下理由が必要", Toast.LENGTH_SHORT).show()
+                if(rejectReason.length > 50 && myAppAuthority == "2"){
+                    Toast.makeText(requireContext(), "却下理由の桁数は50に超えていた", Toast.LENGTH_SHORT).show()
                 }
-                else if (rejectReason.isEmpty()) {
+                else if (rejectReason.isEmpty() && myAppAuthority == "2") {
                     Toast.makeText(requireContext(), "却下理由が必要", Toast.LENGTH_SHORT).show()
                 } else {
+                    if(myAppAuthority == "2"){
+
 //                  休暇申込を却下
-                    RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(calendarNo, rejectReason))
+                        RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(calendarNo, rejectReason))
+                            .enqueue(object : Callback<BaseResponse<String>> {
+                                override fun onResponse(
+                                    call: Call<BaseResponse<String>>?,
+                                    response: Response<BaseResponse<String>>?
+                                ) {
+//                              結果を確認
+                                    response?.let {
+                                        if(it.body().data != null) {
+                                            if(it.body().status == "200"){
+//                                          結果ありの場合
+                                                if(it.body().data != null) {
+
+//                                              画面更新
+                                                    updateList()
+
+                                                    Toast.makeText(
+                                                        requireContext(),
+                                                        "休暇申込を拒否した",
+                                                        Toast.LENGTH_SHORT).show()
+
+                                                }
+
+                                            }
+
+                                        }else {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                it.body().message,
+                                                Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<BaseResponse<String>>?, t: Throwable?) {
+//                        Log.e("TAG","NetWorkErr!")
+                                }
+
+                            })
+                    }
+                    else if(myAppAuthority == "10"){
+
+//                  休暇申込を却下
+                        RequestBuilder().getAPI(User::class.java).HolidayFinalReviewDenied(
+                            HolidayFinalReviewDeniedReq(calendarNo)
+                        )
+                            .enqueue(object : Callback<BaseResponse<String>> {
+                                override fun onResponse(
+                                    call: Call<BaseResponse<String>>?,
+                                    response: Response<BaseResponse<String>>?
+                                ) {
+//                              結果を確認
+                                    response?.let {
+                                        if(it.body().data != null) {
+                                            if(it.body().status == "200"){
+//                                          結果ありの場合
+                                                if(it.body().data != null) {
+
+//                                              画面更新
+                                                    updateFinalList()
+
+                                                    Toast.makeText(
+                                                        requireContext(),
+                                                        "休暇申込を拒否した",
+                                                        Toast.LENGTH_SHORT).show()
+
+                                                }
+
+                                            }
+
+                                        }else {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                it.body().message,
+                                                Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<BaseResponse<String>>?, t: Throwable?) {
+//                        Log.e("TAG","NetWorkErr!")
+                                }
+
+                            })
+                    }
+
+                    dialog.dismiss()
+                }
+            }
+
+//          承認ボタンを設定
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "承認") { dialog, _ ->
+
+                if(myAppAuthority == "2"){
+
+//              休暇申込を承認
+                    RequestBuilder().getAPI(User::class.java).HolidayReviewAccept(HolidayReviewAcceptReq(calendarNo))
                         .enqueue(object : Callback<BaseResponse<String>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<String>>?,
                                 response: Response<BaseResponse<String>>?
                             ) {
-//                              結果を確認
+//                          検索結果を確認
                                 response?.let {
                                     if(it.body().data != null) {
                                         if(it.body().status == "200"){
-//                                          結果ありの場合
+//                                      結果ありの場合
                                             if(it.body().data != null) {
 
-//                                              画面更新
+//                                          画面更新
                                                 updateList()
 
                                                 Toast.makeText(
                                                     requireContext(),
-                                                    "休暇申込を拒否した",
+                                                    "休暇申込を承認した",
                                                     Toast.LENGTH_SHORT).show()
-
                                             }
 
                                         }
@@ -323,53 +579,49 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                             }
 
                         })
-
-
-                    dialog.dismiss()
                 }
-            }
+                else if(myAppAuthority == "10"){
 
-//          承認ボタンを設定
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "承認") { dialog, _ ->
 //              休暇申込を承認
-                RequestBuilder().getAPI(User::class.java).HolidayReviewAccept(HolidayReviewAcceptReq(calendarNo))
-                    .enqueue(object : Callback<BaseResponse<String>> {
-                        override fun onResponse(
-                            call: Call<BaseResponse<String>>?,
-                            response: Response<BaseResponse<String>>?
-                        ) {
+                    RequestBuilder().getAPI(User::class.java).HolidayFinalReviewAccept(HolidayReviewAcceptReq(calendarNo))
+                        .enqueue(object : Callback<BaseResponse<String>> {
+                            override fun onResponse(
+                                call: Call<BaseResponse<String>>?,
+                                response: Response<BaseResponse<String>>?
+                            ) {
 //                          検索結果を確認
-                            response?.let {
-                                if(it.body().data != null) {
-                                    if(it.body().status == "200"){
+                                response?.let {
+                                    if(it.body().data != null) {
+                                        if(it.body().status == "200"){
 //                                      結果ありの場合
-                                        if(it.body().data != null) {
+                                            if(it.body().data != null) {
 
 //                                          画面更新
-                                            updateList()
+                                                updateFinalList()
 
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "休暇申込を承認した",
-                                                Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "休暇申込を承認した",
+                                                    Toast.LENGTH_SHORT).show()
+                                            }
+
                                         }
 
+                                    }else {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            it.body().message,
+                                            Toast.LENGTH_SHORT).show()
                                     }
-
-                                }else {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        it.body().message,
-                                        Toast.LENGTH_SHORT).show()
                                 }
                             }
-                        }
 
-                        override fun onFailure(call: Call<BaseResponse<String>>?, t: Throwable?) {
+                            override fun onFailure(call: Call<BaseResponse<String>>?, t: Throwable?) {
 //                        Log.e("TAG","NetWorkErr!")
-                        }
+                            }
 
-                    })
+                        })
+                }
 
                 dialog.dismiss()
             }
@@ -386,120 +638,247 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
 //          画面の初期化
             binding.tableLayout1.removeAllViews()
+
+            if(myAppAuthority == "2"){
 //          審査待ちの休暇申込を検索
-            RequestBuilder().getAPI(User::class.java).HolidayReview(HolidayReviewReq(myPersonalNo))
-                .enqueue(object : Callback<BaseResponse<List<HolidayAcquire>>> {
-                    @SuppressLint("ResourceType", "SetTextI18n")
-                    override fun onResponse(
-                        call: Call<BaseResponse<List<HolidayAcquire>>>?,
-                        response: Response<BaseResponse<List<HolidayAcquire>>>?
-                    ) {
+                RequestBuilder().getAPI(User::class.java).HolidayReview(HolidayReviewReq(myPersonalNo))
+                    .enqueue(object : Callback<BaseResponse<List<HolidayAcquire>>> {
+                        @SuppressLint("ResourceType", "SetTextI18n")
+                        override fun onResponse(
+                            call: Call<BaseResponse<List<HolidayAcquire>>>?,
+                            response: Response<BaseResponse<List<HolidayAcquire>>>?
+                        ) {
 //                      検索結果を確認
-                        response?.let {
-                            if(it.body().data != null) {
-                                if(it.body().status == "200"){
+                            response?.let {
+                                if(it.body().data != null) {
+                                    if(it.body().status == "200"){
 //                                  検索結果ありの場合
-                                    if(it.body().data != null) {
-                                        it.body().data.let {
+                                        if(it.body().data != null) {
+                                            it.body().data.let {
 
-                                            it?.forEach {item ->
+                                                it?.forEach {item ->
 
-                                                val row = TableRow(requireContext())
-                                                row.setPadding(0, 40, 0, 40)
+                                                    val row = TableRow(requireContext())
+                                                    row.setPadding(0, 40, 0, 40)
 //                                              現場をテーブルに加入
-                                                val member1 = TextView(requireContext())
-                                                member1.textSize = 20F
-                                                member1.width = 90
-                                                member1.text = item.selectedWorkSpot
-                                                row.addView(member1)
+                                                    val member1 = TextView(requireContext())
+                                                    member1.textSize = 20F
+                                                    member1.width = 90
+                                                    member1.text = item.selectedWorkSpot
+                                                    row.addView(member1)
 //                                              社員番号をテーブルに加入
-                                                val member2 = TextView(requireContext())
-                                                member2.textSize = 20F
-                                                member2.width = 90
-                                                member2.text = item.regAuthor
-                                                row.addView(member2)
+                                                    val member2 = TextView(requireContext())
+                                                    member2.textSize = 20F
+                                                    member2.width = 90
+                                                    member2.text = item.regAuthor
+                                                    row.addView(member2)
 //                                              開始時刻をテーブルに加入
-                                                val member3 = TextView(requireContext())
-                                                member3.textSize = 20F
-                                                member3.width = 90
-                                                member3.text = item.startYear.substring(2) + "/" + item.startMonth + "/" + item.startDay
-                                                row.addView(member3)
+                                                    val member3 = TextView(requireContext())
+                                                    member3.textSize = 20F
+                                                    member3.width = 90
+                                                    member3.text = item.startYear.substring(2) + "/" + item.startMonth + "/" + item.startDay
+                                                    row.addView(member3)
 //                                              終了時刻をテーブルに加入
-                                                val member4 = TextView(requireContext())
-                                                member4.textSize = 20F
-                                                member4.width = 90
-                                                member4.text = item.endYear.substring(2) + "/" + item.endMonth + "/" + item.endDay
-                                                row.addView(member4)
+                                                    val member4 = TextView(requireContext())
+                                                    member4.textSize = 20F
+                                                    member4.width = 90
+                                                    member4.text = item.endYear.substring(2) + "/" + item.endMonth + "/" + item.endDay
+                                                    row.addView(member4)
 
 //                                              検索結果のクリックで詳細画面を表示
-                                                member1.setOnClickListener {
-                                                    showAlertDialog(
-                                                        item.selectedWorkSpot,
-                                                        item.regAuthor,
-                                                        item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
-                                                        item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
-                                                        vacationNoShow(item.vacationNo),
-                                                        item.reason,
-                                                        item.calendarNo
-                                                    )
-                                                }
-                                                member2.setOnClickListener {
-                                                    showAlertDialog(
-                                                        item.selectedWorkSpot,
-                                                        item.regAuthor,
-                                                        item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
-                                                        item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
-                                                        vacationNoShow(item.vacationNo),
-                                                        item.reason,
-                                                        item.calendarNo
-                                                    )
-                                                }
-                                                member3.setOnClickListener {
-                                                    showAlertDialog(
-                                                        item.selectedWorkSpot,
-                                                        item.regAuthor,
-                                                        item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
-                                                        item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
-                                                        vacationNoShow(item.vacationNo),
-                                                        item.reason,
-                                                        item.calendarNo
-                                                    )
-                                                }
-                                                member4.setOnClickListener {
-                                                    showAlertDialog(
-                                                        item.selectedWorkSpot,
-                                                        item.regAuthor,
-                                                        item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
-                                                        item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
-                                                        vacationNoShow(item.vacationNo),
-                                                        item.reason,
-                                                        item.calendarNo
-                                                    )
-                                                }
+                                                    member1.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member2.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member3.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member4.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
 //                                              テーブルを審査画面に追加
-                                                binding.tableLayout1.addView(row)
+                                                    binding.tableLayout1.addView(row)
+
+                                                }
 
                                             }
-
                                         }
+
                                     }
 
+                                }else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        it.body().message,
+                                        Toast.LENGTH_SHORT).show()
                                 }
-
-                            }else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    it.body().message,
-                                    Toast.LENGTH_SHORT).show()
                             }
                         }
-                    }
 
-                    override fun onFailure(call: Call<BaseResponse<List<HolidayAcquire>>>?, t: Throwable?) {
+                        override fun onFailure(call: Call<BaseResponse<List<HolidayAcquire>>>?, t: Throwable?) {
 //                        Log.e("TAG","NetWorkErr!")
-                    }
+                        }
 
-                })
+                    })
+            }
+            else if(myAppAuthority == "10"){
+        //          審査待ちの休暇申込を検索
+                RequestBuilder().getAPI(User::class.java).HolidayFinalReview()
+                    .enqueue(object : Callback<BaseResponse<List<HolidayAcquire>>> {
+                        @SuppressLint("ResourceType", "SetTextI18n")
+                        override fun onResponse(
+                            call: Call<BaseResponse<List<HolidayAcquire>>>?,
+                            response: Response<BaseResponse<List<HolidayAcquire>>>?
+                        ) {
+        //                      検索結果を確認
+                            response?.let {
+                                if(it.body().data != null) {
+                                    if(it.body().status == "200"){
+        //                                  検索結果ありの場合
+                                        if(it.body().data != null) {
+                                            it.body().data.let {
+
+                                                it?.forEach {item ->
+
+                                                    val row = TableRow(requireContext())
+                                                    row.setPadding(0, 40, 0, 40)
+        //                                              現場をテーブルに加入
+                                                    val member1 = TextView(requireContext())
+                                                    member1.textSize = 20F
+                                                    member1.width = 90
+                                                    member1.text = item.selectedWorkSpot
+                                                    row.addView(member1)
+        //                                              社員番号をテーブルに加入
+                                                    val member2 = TextView(requireContext())
+                                                    member2.textSize = 20F
+                                                    member2.width = 90
+                                                    member2.text = item.regAuthor
+                                                    row.addView(member2)
+        //                                              開始時刻をテーブルに加入
+                                                    val member3 = TextView(requireContext())
+                                                    member3.textSize = 20F
+                                                    member3.width = 90
+                                                    member3.text = item.startYear.substring(2) + "/" + item.startMonth + "/" + item.startDay
+                                                    row.addView(member3)
+        //                                              終了時刻をテーブルに加入
+                                                    val member4 = TextView(requireContext())
+                                                    member4.textSize = 20F
+                                                    member4.width = 90
+                                                    member4.text = item.endYear.substring(2) + "/" + item.endMonth + "/" + item.endDay
+                                                    row.addView(member4)
+
+        //                                              検索結果のクリックで詳細画面を表示
+                                                    member1.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member2.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member3.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+                                                    member4.setOnClickListener {
+                                                        showAlertDialog(
+                                                            item.selectedWorkSpot,
+                                                            item.regAuthor,
+                                                            item.startYear + "/" + item.startMonth + "/" + item.startDay + " " + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2),
+                                                            item.endYear + "/" + item.endMonth + "/" + item.endDay + " " + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2),
+                                                            vacationNoShow(item.vacationNo),
+                                                            item.reason,
+                                                            item.calendarNo,
+                                                            item.refusal
+                                                        )
+                                                    }
+        //                                              テーブルを審査画面に追加
+                                                    binding.tableLayout1.addView(row)
+
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+
+                                }else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        it.body().message,
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+
+                        override fun onFailure(call: Call<BaseResponse<List<HolidayAcquire>>>?, t: Throwable?) {
+        //                        Log.e("TAG","NetWorkErr!")
+                        }
+
+                    })
+            }
         }
 //
         binding.tableLayout1.let { it ->
