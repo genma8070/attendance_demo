@@ -9,6 +9,7 @@ package com.example.demo_06.network.res
 
 data class HolidayAcquire (
     val holidayAcquireNo: String="",
+    val workSpotDepart: String="",
     val selectedWorkSpot: String="",
     val startYear: String="",
     val startMonth: String="",
