@@ -50,6 +50,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 //      ユーザーのアカウントを取得
         val myPersonalNo = accountPublic0
 
+//      ユーザーの権限を取得 
         val myAppAuthority = appAuthorityPublic
 
 //      休暇種類の表示
