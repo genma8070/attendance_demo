@@ -341,14 +341,16 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
+            if(workSpot != null){
 //          現場の内容を設定
-            val workSpotText = SpannableString("現場 : $workSpot\n")
+                val workSpotText = SpannableString("現場 : $workSpot\n")
 //        workSpotText.setSpan(ForegroundColorSpan(Color.BLACK), 0, workSpotText.length, 0)
 //          現場を設定
-            val workSpotTextView = TextView(requireContext())
-            workSpotTextView.textSize = 20F
-            workSpotTextView.text = workSpotText
-            linearLayout.addView(workSpotTextView, params)
+                val workSpotTextView = TextView(requireContext())
+                workSpotTextView.textSize = 20F
+                workSpotTextView.text = workSpotText
+                linearLayout.addView(workSpotTextView, params)
+            }
 //          社員番号の内容を設定
             val personalNoText = SpannableString("社員番号     : $personalNo\n")
 //        personalNoText.setSpan(ForegroundColorSpan(Color.BLACK), 0, personalNoText.length, 0)
@@ -680,13 +682,13 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                                                     val member3 = TextView(requireContext())
                                                     member3.textSize = 20F
                                                     member3.width = 90
-                                                    member3.text = item.startYear.substring(2) + "/" + item.startMonth + "/" + item.startDay
+                                                    member3.text = item.startYear.substring(2) + "/" + item.startMonth + "/" + item.startDay + "\n" + item.startTime.substring(0, 2) + ":" + item.startTime.substring(2)
                                                     row.addView(member3)
 //                                              終了時刻をテーブルに加入
                                                     val member4 = TextView(requireContext())
                                                     member4.textSize = 20F
                                                     member4.width = 90
-                                                    member4.text = item.endYear.substring(2) + "/" + item.endMonth + "/" + item.endDay
+                                                    member4.text = item.endYear.substring(2) + "/" + item.endMonth + "/" + item.endDay + "\n" + item.endTime.substring(0, 2) + ":" + item.endTime.substring(2)
                                                     row.addView(member4)
 
 //                                              検索結果のクリックで詳細画面を表示
