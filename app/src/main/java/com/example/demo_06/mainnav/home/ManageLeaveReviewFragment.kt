@@ -389,7 +389,8 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
             linearLayout.addView(reasonTextView, params)
 
             val rejectReasonEditText = EditText(requireContext())
-            if(myAppAuthority == "2"){
+//            if(myAppAuthority == "2"){
+            if(myAppAuthority == "10"){
 //          拒絕理由のタイトルを設定
                 val rejectReasonText = SpannableString("却下理由     : ")
                 val rejectReasonTextView = TextView(requireContext())
@@ -400,28 +401,28 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 rejectReasonEditText.hint = "却下には却下理由が必要"
                 linearLayout.addView(rejectReasonEditText, params)
             }
-            else if(myAppAuthority == "10"){
-                if(refusal != null){
-                        val rejectText = SpannableString("現場審査     : 却下")
-                        val rejectTextView = TextView(requireContext())
-                        rejectTextView.textSize = 20F
-                        rejectTextView.text = rejectText
-                        linearLayout.addView(rejectTextView, params)
-//          拒絕理由のタイトルを設定
-                        val rejectReasonText = SpannableString("却下理由     : $refusal ")
-                        val rejectReasonTextView = TextView(requireContext())
-                        rejectReasonTextView.textSize = 20F
-                        rejectReasonTextView.text = rejectReasonText
-                        linearLayout.addView(rejectReasonTextView, params)
-                }
-                else{
-                    val rejectReasonText = SpannableString("現場審査     : 承認")
-                    val rejectReasonTextView = TextView(requireContext())
-                    rejectReasonTextView.textSize = 20F
-                    rejectReasonTextView.text = rejectReasonText
-                    linearLayout.addView(rejectReasonTextView, params)
-                }
-            }
+//            else if(myAppAuthority == "10"){
+//                if(refusal != null){
+//                        val rejectText = SpannableString("現場審査     : 却下")
+//                        val rejectTextView = TextView(requireContext())
+//                        rejectTextView.textSize = 20F
+//                        rejectTextView.text = rejectText
+//                        linearLayout.addView(rejectTextView, params)
+////          拒絕理由のタイトルを設定
+//                        val rejectReasonText = SpannableString("却下理由     : $refusal ")
+//                        val rejectReasonTextView = TextView(requireContext())
+//                        rejectReasonTextView.textSize = 20F
+//                        rejectReasonTextView.text = rejectReasonText
+//                        linearLayout.addView(rejectReasonTextView, params)
+//                }
+//                else{
+//                    val rejectReasonText = SpannableString("現場審査     : 承認")
+//                    val rejectReasonTextView = TextView(requireContext())
+//                    rejectReasonTextView.textSize = 20F
+//                    rejectReasonTextView.text = rejectReasonText
+//                    linearLayout.addView(rejectReasonTextView, params)
+//                }
+//            }
 
 //          詳細画面にlinearLayoutと設定
             alertDialog.setView(linearLayout)
@@ -437,16 +438,18 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 val rejectReason = rejectReasonEditText.text.toString()
 
 //              却下理由をチェック
-                if(rejectReason.length > 50 && myAppAuthority == "2"){
+//                if(rejectReason.length > 50 && myAppAuthority == "2"){
+                if(rejectReason.length > 50 && myAppAuthority == "10"){
                     Toast.makeText(requireContext(), "却下理由の桁数は50に超えていた", Toast.LENGTH_SHORT).show()
                 }
-                else if (rejectReason.isEmpty() && myAppAuthority == "2") {
+//                else if (rejectReason.isEmpty() && myAppAuthority == "2") {
+                else if (rejectReason.isEmpty() && myAppAuthority == "10") {
                     Toast.makeText(requireContext(), "却下理由が必要", Toast.LENGTH_SHORT).show()
                 } else {
                     if(myAppAuthority == "2"){
 
 //                  休暇申込を却下
-                        RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(myPersonalNo, holidayAcquireNo, rejectReason))
+                        RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(myPersonalNo, holidayAcquireNo))
                             .enqueue(object : Callback<BaseResponse<String>> {
                                 override fun onResponse(
                                     call: Call<BaseResponse<String>>?,
@@ -490,7 +493,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
 //                  休暇申込を却下
                         RequestBuilder().getAPI(User::class.java).HolidayFinalReviewDenied(
-                            HolidayFinalReviewDeniedReq(myPersonalNo, holidayAcquireNo)
+                            HolidayFinalReviewDeniedReq(myPersonalNo, holidayAcquireNo, rejectReason)
                         )
                             .enqueue(object : Callback<BaseResponse<String>> {
                                 override fun onResponse(
