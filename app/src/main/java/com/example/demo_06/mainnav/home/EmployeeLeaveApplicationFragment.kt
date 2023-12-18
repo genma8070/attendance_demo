@@ -366,73 +366,25 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
             val alertDialog = dialog.create()
             alertDialog.show()
         }
-
-////      休暇タイプをタイプ1に表示
-//        binding.holidayType1.setOnClickListener{
-//            binding.holidayType1.setBackgroundColor(Color.parseColor("#0000FF"))
-//            binding.holidayType1.setTextColor(Color.parseColor("#FFFFFF"))
-//            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
-//            leaveTypeTemp = "私用"
-//        }
-////      休暇タイプをタイプ2に表示
-//        binding.holidayType2.setOnClickListener{
-//            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType2.setBackgroundColor(Color.parseColor("#0000FF"))
-//            binding.holidayType2.setTextColor(Color.parseColor("#FFFFFF"))
-//            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
-//            leaveTypeTemp = "体調不良"
-//        }
-////      休暇タイプをタイプ3に表示
-//        binding.holidayType3.setOnClickListener{
-//            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType3.setBackgroundColor(Color.parseColor("#0000FF"))
-//            binding.holidayType3.setTextColor(Color.parseColor("#FFFFFF"))
-//            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
-//            leaveTypeTemp = "振替"
-//        }
-////      休暇タイプをタイプ4に表示
-//        binding.holidayType4.setOnClickListener{
-//            binding.holidayType1.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType1.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
-//            binding.holidayType4.setBackgroundColor(Color.parseColor("#0000FF"))
-//            binding.holidayType4.setTextColor(Color.parseColor("#FFFFFF"))
-//            leaveTypeTemp = "他"
-//        }
-
+//      休暇種類を設定
         binding.spinnerLeaveType.let {
-//            val leaveTypeSpinner = binding.root.findViewById<Spinner>(R.id.spinnerLeaveType)
+//          全ての休暇種類を取得
             val leaveTypes = resources.getStringArray(R.array.leave_types)
+//          アダプターを初期化
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, leaveTypes)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             it.adapter = adapter
 
+//          休假種類を選択
             it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    // 取得選擇的休假種類
+//                  選択した休假種類を取得
                     val selectedLeaveType = leaveTypes[position]
-                    // 在這裡處理你的邏輯，例如更新 UI 或儲存選擇的休假種類
                     leaveTypeTemp = selectedLeaveType
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // 未選擇時的處理
+
                 }
             }
 
@@ -476,23 +428,9 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
                                             binding.startTime.text = "時間を選択"
                                             binding.endDate.text = "日付を選択"
                                             binding.endTime.text = "時間を選択"
-//                                            binding.holidayType1.setBackgroundColor(Color.parseColor("#0000FF"))
-//                                            binding.holidayType1.setTextColor(Color.parseColor("#FFFFFF"))
-//                                            binding.holidayType2.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//                                            binding.holidayType2.setTextColor(Color.parseColor("#000000"))
-//                                            binding.holidayType3.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//                                            binding.holidayType3.setTextColor(Color.parseColor("#000000"))
-//                                            binding.holidayType4.setBackgroundColor(Color.parseColor("#EEEEEE"))
-//                                            binding.holidayType4.setTextColor(Color.parseColor("#000000"))
-
-//                                            binding.spinnerLeaveType.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.leave_types))
-//                                            val adapter = binding.spinnerLeaveType
-//                                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
                                             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(R.array.leave_types))
                                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                                             binding.spinnerLeaveType.adapter = adapter
-
 
                                             leaveTypeTemp = "私用"
                                             binding.reason.setText("")
