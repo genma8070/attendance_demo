@@ -99,55 +99,18 @@
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:text="休暇種類:"/>
-    <LinearLayout
+    <Spinner
+        android:id="@+id/spinnerLeaveType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/holiday_type1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="私用"
-            android:backgroundTint="#0000FF"
-            android:textColor="#FFFFFF"
-            android:textSize="26dp"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="3dp"/>
-        <Button
-            android:id="@+id/holiday_type2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="体調不良"
-            android:backgroundTint="#EEEEEE"
-            android:textColor="#000000"
-            android:textSize="26dp"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="3dp"/>
-        <Button
-            android:id="@+id/holiday_type3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="振替"
-            android:backgroundTint="#EEEEEE"
-            android:textColor="#000000"
-            android:textSize="26dp"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="3dp"/>
-        <Button
-            android:id="@+id/holiday_type4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="他"
-            android:backgroundTint="#EEEEEE"
-            android:textColor="#000000"
-            android:textSize="26dp"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="3dp"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="50sp"
+        android:layout_marginRight="30sp"
+        android:inputType="date"
+        android:text=" 時間を選択 "
+        android:textSize="26sp"
+        android:entries="@array/leave_types"
+        android:prompt="@string/select_leave_type"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
