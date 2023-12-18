@@ -446,7 +446,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                     if(myAppAuthority == "2"){
 
 //                  休暇申込を却下
-                        RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(holidayAcquireNo, rejectReason))
+                        RequestBuilder().getAPI(User::class.java).HolidayReviewDenied(HolidayReviewDeniedReq(myPersonalNo, holidayAcquireNo, rejectReason))
                             .enqueue(object : Callback<BaseResponse<String>> {
                                 override fun onResponse(
                                     call: Call<BaseResponse<String>>?,
@@ -490,7 +490,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
 //                  休暇申込を却下
                         RequestBuilder().getAPI(User::class.java).HolidayFinalReviewDenied(
-                            HolidayFinalReviewDeniedReq(holidayAcquireNo)
+                            HolidayFinalReviewDeniedReq(myPersonalNo, holidayAcquireNo)
                         )
                             .enqueue(object : Callback<BaseResponse<String>> {
                                 override fun onResponse(
@@ -542,7 +542,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 if(myAppAuthority == "2"){
 
 //              休暇申込を承認
-                    RequestBuilder().getAPI(User::class.java).HolidayReviewAccept(HolidayReviewAcceptReq(holidayAcquireNo))
+                    RequestBuilder().getAPI(User::class.java).HolidayReviewAccept(HolidayReviewAcceptReq(myPersonalNo, holidayAcquireNo))
                         .enqueue(object : Callback<BaseResponse<String>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<String>>?,
@@ -584,7 +584,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
                 else if(myAppAuthority == "10"){
 
 //              休暇申込を承認
-                    RequestBuilder().getAPI(User::class.java).HolidayFinalReviewAccept(HolidayReviewAcceptReq(holidayAcquireNo))
+                    RequestBuilder().getAPI(User::class.java).HolidayFinalReviewAccept(HolidayReviewAcceptReq(myPersonalNo, holidayAcquireNo))
                         .enqueue(object : Callback<BaseResponse<String>> {
                             override fun onResponse(
                                 call: Call<BaseResponse<String>>?,
