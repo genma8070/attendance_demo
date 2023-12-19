@@ -1,5 +1,6 @@
 package com.example.demo_06.mainnav.home
 
+import android.R
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.Color
@@ -8,6 +9,8 @@ import android.text.InputFilter
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -39,8 +42,6 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
     true
 ){
 
-
-
     override fun initFragment(
         binding: FragmentManageLeaveReviewBinding,
         viewModel: PublicViewModel?,
@@ -53,17 +54,44 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 //      ユーザーの権限を取得
         val myAppAuthority = appAuthorityPublic
 
+        var allVacationNo: Array<String> = emptyArray()
+
+
+        RequestBuilder().getAPI(User::class.java).GetAllVacationNo()
+            .enqueue(object : Callback<BaseResponse<Array<String>>> {
+                override fun onResponse(
+                    call: Call<BaseResponse<Array<String>>>?,
+                    response: Response<BaseResponse<Array<String>>>?
+                ) {
+                    response?.let {
+                        if(it.body().data != null) {
+//                          休暇申込が成功したかを確認
+                            if(it.body().status == "200"){
+
+                                allVacationNo = it.body().data!!
+
+//                                ?
+
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    allVacationNo[0],
+//                                    Toast.LENGTH_SHORT).show()
+
+                            }
+
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<BaseResponse<Array<String>>>?, t: Throwable?) {
+//                        Log.e("TAG","NetWorkErr!")
+                }
+
+            })
+
 //      休暇種類の表示
         fun vacationNoShow(vacationNo: String): String{
-            if(vacationNo == "11"){
-                return "私用"
-            }else if(vacationNo == "12"){
-                return "体調不良"
-            }else if(vacationNo == "13"){
-                return "振替"
-            }else{
-                return "他"
-            }
+            return allVacationNo[vacationNo.toInt()-1]
         }
 
 //      審査画面

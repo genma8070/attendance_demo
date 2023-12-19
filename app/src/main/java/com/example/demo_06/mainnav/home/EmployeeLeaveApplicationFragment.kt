@@ -97,6 +97,7 @@ class EmployeeLeaveApplicationFragment: BaseFragment<FragmentEmployeeLeaveApplic
 
         RequestBuilder().getAPI(User::class.java).GetAllVacationNo()
             .enqueue(object : Callback<BaseResponse<Array<String>>> {
+                @SuppressLint("SuspiciousIndentation")
                 override fun onResponse(
                     call: Call<BaseResponse<Array<String>>>?,
                     response: Response<BaseResponse<Array<String>>>?
