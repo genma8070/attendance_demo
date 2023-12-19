@@ -91,7 +91,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
 //      休暇種類の表示
         fun vacationNoShow(vacationNo: String): String{
-            return allVacationNo[vacationNo.toInt()-1]
+            return allVacationNo[vacationNo.toInt()-1] 
         }
 
 //      審査画面
