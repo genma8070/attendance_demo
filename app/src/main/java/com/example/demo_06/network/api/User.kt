@@ -30,6 +30,11 @@ interface User {
     @POST("user/search_belong_work_spot")
     fun WorkSpot(@Body workSpotInfo: WorkSpotReq): Call<BaseResponse<SearchBelongWorkSpotRes>>
 
+
+    @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
+    @POST("user/get_all_vacationNo")
+    fun GetAllVacationNo(): Call<BaseResponse<Array<String>>>
+
 //  休暇申込
     @Headers("Content-type:application/json;charset=utf-8","Accept:application/json")
     @POST("user/holiday_acquire")

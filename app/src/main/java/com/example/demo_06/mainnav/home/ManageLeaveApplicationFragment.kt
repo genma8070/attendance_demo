@@ -46,6 +46,69 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
 //      休暇タイプ
         var leaveTypeTemp = "私用"
 
+        var allVacationNo: Array<String> = emptyArray()
+
+
+        RequestBuilder().getAPI(User::class.java).GetAllVacationNo()
+            .enqueue(object : Callback<BaseResponse<Array<String>>> {
+                override fun onResponse(
+                    call: Call<BaseResponse<Array<String>>>?,
+                    response: Response<BaseResponse<Array<String>>>?
+                ) {
+                    response?.let {
+                        if(it.body().data != null) {
+//                          休暇申込が成功したかを確認
+                            if(it.body().status == "200"){
+
+                                allVacationNo = it.body().data!!
+
+//                                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allVacationNo)
+//                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                                binding.spinnerLeaveType.adapter = adapter
+
+                                //      休暇種類を設定
+                                binding.spinnerLeaveType.let {
+                                    //          全ての休暇種類を取得
+                                    val leaveTypes = allVacationNo
+                                    //          アダプターを初期化
+                                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, leaveTypes)
+//                                        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resources.getStringArray(
+//                                            com.example.demo_06.R.array.leave_types))
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                    it.adapter = adapter
+
+                                    //          休假種類を選択
+                                    it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                            //                  選択した休假種類を取得
+                                            val selectedLeaveType = leaveTypes[position]
+                                            leaveTypeTemp = selectedLeaveType
+                                        }
+
+                                        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                        }
+                                    }
+
+                                }
+
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    allVacationNo.toString(),
+//                                    Toast.LENGTH_SHORT).show()
+
+                            }
+
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<BaseResponse<Array<String>>>?, t: Throwable?) {
+//                        Log.e("TAG","NetWorkErr!")
+                }
+
+            })
+
 //      開始日付を選択
         binding.startDate.setOnClickListener {
             val calendar: Calendar = Calendar.getInstance()
@@ -238,30 +301,6 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
             alertDialog.show()
         }
 
-//      休暇種類を設定
-        binding.spinnerLeaveType.let {
-//          全ての休暇種類を取得
-            val leaveTypes = resources.getStringArray(com.example.demo_06.R.array.leave_types)
-//          アダプターを初期化
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, leaveTypes)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            it.adapter = adapter
-
-//          休假種類を選択
-            it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                  選択した休假種類を取得
-                    val selectedLeaveType = leaveTypes[position]
-                    leaveTypeTemp = selectedLeaveType
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-            }
-
-        }
-
 //        fun MutableListToJsonArray(list: MutableList<String>): JSONArray {
 //            val jsonArray = JSONArray()
 //            list.forEach { jsonArray.put(it) }
@@ -304,12 +343,12 @@ class ManageLeaveApplicationFragment: BaseFragment<FragmentManageLeaveApplicatio
                                             binding.startTime.text = "時間を選択"
                                             binding.endDate.text = "日付を選択"
                                             binding.endTime.text = "時間を選択"
-                                            val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, resources.getStringArray(
-                                                com.example.demo_06.R.array.leave_types))
+                                            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, allVacationNo)
                                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                                             binding.spinnerLeaveType.adapter = adapter
 
-                                            leaveTypeTemp = "私用"
+//                                            leaveTypeTemp = "私用"
+                                            leaveTypeTemp = allVacationNo[0]
                                             binding.reason.setText("")
                                         }
 

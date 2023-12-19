@@ -2,8 +2,8 @@
 <resources>
     <array name="leave_types">
         <item>私用</item>
-        <item>体調不良</item>
-        <item>振替</item>
-        <item>他</item>
+        <!--        <item>体調不良</item>-->
+        <!--        <item>振替</item>-->
+        <!--        <item>他</item>-->
     </array>
 </resources>
