@@ -56,7 +56,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
         var allVacationNo: Array<String> = emptyArray()
 
-
+//      休暇理由を取得
         RequestBuilder().getAPI(User::class.java).GetAllVacationNo()
             .enqueue(object : Callback<BaseResponse<Array<String>>> {
                 override fun onResponse(
@@ -91,7 +91,7 @@ class ManageLeaveReviewFragment: BaseFragment<FragmentManageLeaveReviewBinding, 
 
 //      休暇種類の表示
         fun vacationNoShow(vacationNo: String): String{
-            return allVacationNo[vacationNo.toInt()-1] 
+            return allVacationNo[vacationNo.toInt()-1]
         }
 
 //      審査画面
